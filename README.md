@@ -1,40 +1,47 @@
 # spec-to-ship
 
-面向个人与小团队的 AI 辅助研发流程，以可组合的 Skills 和阶段产物连接需求、实现与验收。
+面向个人与小团队的 AI 辅助研发接入仓库：**原生 Matt Skills 负责澄清、spec、tickets、实施、测试和审查；本仓库补充项目接入、产品验收与知识同步。**
 
-当前交付是**流程文档与模板初稿，待审阅**。以 Matt Skills 的可组合能力为后续适配基础，参考 agentic-delivery 的阶段产物与证据思路；Matt 与 agentic-delivery 的研发 Skills 尚未安装、适配或执行；README 流程图使用已安装的 diagram-design 绘图 Skill 制作。来源、固定版本、许可证和差异见 [SOURCES.md](SOURCES.md)。
-
-## 适用范围
-
-适用于需要把需求、技术实现和验收依据串起来的功能开发与小型修改。完整功能默认保留各阶段必要产物；小型修改允许合并文件，但需求、方案、验证、验收仍有独立段落与引用。PRD 定义产品行为，技术方案定义实现方式，不互相复制。
-
-本仓库保存通用流程、模板及未来经过审阅的 Skills；业务规则、模块知识和实际任务产物留在业务项目。当前未提供 CLI、看板、自动状态机、程序化门禁或复杂知识库，不引入 OpenSpec。Farvis 真实功能试跑属于后续工作，本次未修改 Farvis。
+已收录固定版本的 12 个 Matt Skills 和 2 个自定义 Skills，原生文件不改写。工具链文件与项目链接方式已做本地检查，尚不能据此宣称真实业务交付已验证。来源、许可证和逐文件校验见 [SOURCES.md](SOURCES.md) 与 [upstream-manifest.json](upstream-manifest.json)。
 
 ## 流程总览
 
-![七阶段研发流程、核心产物与反馈路径](docs/diagrams/workflow-overview.svg)
+![原生 Matt Skills 到产品验收与知识同步](docs/diagrams/workflow-overview.svg)
 
-图中的顺序表示满足完成条件后的正常交接；失败、阻塞或未运行不能作为阶段通过的依据。具体输入、完成条件与反馈规则以 [workflow.md](workflow.md) 为准。[可编辑 HTML 源文件](docs/diagrams/workflow-overview.html) 可下载后用浏览器打开；GitHub 页面展示的是源码。HTML 与 SVG 均使用系统字体，无外部字体请求，可离线查看。
-
-## 目录
-
-- [AGENTS.md](AGENTS.md)：仅约束本仓库维护。
-- [workflow.md](workflow.md)：阶段、交接、反馈、状态与知识同步的权威约定。
-- [SOURCES.md](SOURCES.md)：来源核对与后续复用建议。
-- [templates/README.md](templates/README.md)：模板选用、占位符和产物存放约定。
-- `templates/`：PRD、技术方案、任务、测试、产品验收、收尾、模块知识、可选会话交接模板。
-
-没有创建 `skills/` 空目录；后续确认适配范围后再加入实际能力。
+图中为用户按需显式调用的顺序与反馈，不是自动编排或程序化门禁。详细约定见 [workflow.md](workflow.md)。[可编辑 HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线打开；GitHub 展示的是源码。图表沿用 diagram-design 默认配色和系统字体。
 
 ## 快速开始
 
-当前可直接使用的是文档模板，无需安装 Skills 或运行工具。
+1. 将本仓库保留在固定本地位置，在业务项目创建链接。命令中的路径替换为实际绝对路径，不改全局 Skills：
 
-1. 阅读 [流程约定](workflow.md) 和 [模板索引](templates/README.md)，检查业务项目已有 AGENTS.md 与模块文档，沿用其权威位置。
-2. 在业务项目建立任务目录，例如 `docs/changes/<功能名>/`。完整功能复制 `prd.md`、`technical-design.md`、`test.md`、`acceptance.md`、`closeout.md`；将 `task.md` 按任务复制为 `tasks/T-001.md` 等。小型修改可按流程合并文件，但保留需求、方案、验证、验收及收尾信息。
-3. 替换 `{{说明}}` 占位符并修正链接。先在 PRD 中确定 R 需求与 AC 验收标准，再写技术方案、拆 T 任务；低风险假设记录下来，关键决定按已有授权确认。
-4. 开发记录写回任务单；测试按 TC 记录版本、环境、实际结果与证据，产品验收逐项对照 AC。收尾时更新已有模块知识，或明确写“无需更新”；模块模板与会话交接模板仅按需使用。
+   ```bash
+   python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目 --check
+   python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目
+   ```
 
-同一个人、会话或 Agent 可以承担多个阶段。文档分离不要求更换会话，也不要求逐阶段重复确认。流程由人和 Agent 遵循，当前没有自动检查状态或阻止交接的程序。
+2. 在业务项目下一轮会话检查可用 Skills 与路径。存在全局同名版本时，使用明确路径：`请使用 /绝对路径/业务项目/.agents/skills/setup-matt-pocock-skills/SKILL.md 配置本地 Markdown tracker。` 初次接入按 [项目接入](docs/project-setup.md) 核对 tracker、产物路径和知识职责，保留已有 AGENTS／CLAUDE 内容。
+3. 开始真实功能时依次按需调用：
 
-审阅本初稿时重点确认文档体量是否合适；本仓库自身许可证、首批 Skills 适配范围以及 Farvis 试跑功能仍待决定，不影响本次初稿审阅。
+   | 目的 | 用户入口 | 产物／结果 |
+   | --- | --- | --- |
+   | 澄清目标与决定 | `$grill-with-docs` | 已澄清讨论，按需更新词汇／重要决定 |
+   | 整理统一规格 | `$to-spec` | `.scratch/<feature>/spec.md`，含产品、实现、测试决定 |
+   | 拆分交付结果 | `$to-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
+   | 实施与测试循环 | `$implement`；缺陷按需 `$diagnosing-bugs` | 代码、测试结果；原生调用 tdd 与 code-review |
+   | 最终回归与审查 | 执行项目约定回归，再 `$code-review` 并给出基线和 spec 路径 | 对应当前版本的检查结果和审查意见 |
+   | 产品验收 | `$sts-acceptance` | 引用 spec 标准及当前证据的验收记录 |
+   | 收尾知识同步 | `$sts-closeout` | 交付入口、遗留事项、当前模块知识更新 |
+
+短名仅在会话已确认对应本项目路径时使用；否则将入口写成上面的绝对 `SKILL.md` 路径，依赖也选同目录固定版本。无需每个目的换会话；不要让导航器强制逐一调用所有 Skills。简单工作不强制拆多张 tickets。换会话时才用 `$handoff`。
+
+原生 `implement` 包含提交动作；先沿用或明确该任务的提交授权。原生 `code-review` 用 `base...HEAD` 审查已提交差异：最终验收前，审查必须覆盖交付 HEAD，未提交变更不能假称已覆盖。细节见 [流程中的版本与权限](workflow.md#版本证据与权限)。
+
+## 范围与目录
+
+- [skills/](skills/)：12 个原生目录及 `sts-acceptance`、`sts-closeout`；补充模板各自在 Skill 内自包含。
+- [docs/project-setup.md](docs/project-setup.md)：业务项目接入、最小配置、同名冲突与知识分工。
+- [workflow.md](workflow.md)：当前单一路线、反馈和证据约定。
+- [SOURCES.md](SOURCES.md)、[upstream-manifest.json](upstream-manifest.json)、[licenses/](licenses/)：来源和许可。
+- [AGENTS.md](AGENTS.md)：只规定本仓库维护要求。
+
+业务项目保留真实任务、代码证据和模块知识。本仓库不提供第二套 PRD／技术方案／任务模板，不强制 R／AC 编号，不建设流程 CLI、看板、状态机、复杂知识库或 OpenSpec。原生 Skills 是否成功发现及真实业务执行结果需在目标宿主验证。

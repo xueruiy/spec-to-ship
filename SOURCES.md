@@ -1,66 +1,58 @@
-# 来源、许可证与复用记录
+# 来源、版本与复用边界
 
-核对日期：2026-09-08。状态：研究已完成，流程及模板为待审阅初稿，研发 Skills 适配尚未实施；README 流程图已使用本地安装的 diagram-design 绘图 Skill 制作。
+核对日期：2026-09-09。当前实现采用固定版本原生 Matt Skills，辅以项目链接、产品验收及知识同步。没有第二套 PRD／技术方案／tickets 流程；旧 `templates/` 已删除，历史记录仅保留在 Git 历史。
 
-研发流程研究通过 GitHub 页面与临时目录内只读浅克隆核对 Matt Skills、agentic-delivery 的默认分支 HEAD、跟踪文件和正文；未运行这两个仓库的脚本或 Skills。绘图补充使用了已安装的 diagram-design 及其自检脚本，没有安装新依赖。以下分别记录研发参考快照与绘图工具本地版本，不保证未来 HEAD 不变。
+## Matt Skills：原生导入
 
-## 上游快照与许可证
+- 来源：[mattpocock/skills](https://github.com/mattpocock/skills)，固定 commit `3cca18b368ae95cdbdebbff572ccafa662551015`（2026-09-04T09:43:27+01:00）。本次固定此版本，不宣称它是未来最新版本。
+- 使用系统 skill-installer 的 `install-skill-from-github.py --repo mattpocock/skills --ref 3cca18b368ae95cdbdebbff572ccafa662551015 --dest /绝对路径/spec-to-ship/skills --path ...` 导入下表完整目录，保留正文、agents 元数据、references、模板与脚本，不改写原生文件。
+- [完整 MIT 许可证](licenses/mattpocock-skills.LICENSE)：Copyright (c) 2026 Matt Pocock，适用于导入内容。所有原生来源路径、本地路径、逐文件 SHA-256、选入原因和依赖见 [upstream-manifest.json](upstream-manifest.json)。复制这些原生目录时应同时保留该许可，不将其视为本仓库全部自有内容的许可证。
+- [verify-upstream.py](scripts/verify-upstream.py) 校验 36 个原生文件及许可证的 hash、文件集合、依赖和资源链接。加 `--source /上游Git目录` 可直接用固定 commit 的 `git show` 字节对比，而非只信任本地 manifest。
 
-| 上游 | 默认分支与固定 commit | 提交时间 | 许可证核对 | 本次处理 |
-| --- | --- | --- | --- | --- |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | main · `3cca18b368ae95cdbdebbff572ccafa662551015` | 2026-09-04T09:43:27+01:00 | 根目录 [LICENSE](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/LICENSE)：MIT，Copyright (c) 2026 Matt Pocock | 阅读与概念参考；没有复制或修改上游 Skill 文件 |
-| [RR9-cn/agentic-delivery](https://github.com/RR9-cn/agentic-delivery) | main · `9573a3758e19c82925a580010d4d9d54a023a70a` | 2026-09-03T22:48:58+08:00 | 当前跟踪文件中未发现 LICENSE／LICENCE／COPYING／NOTICE；[README 的 Status](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/README.md#status) 将最终许可证列为待定 | 复用权限未明确；不复制其代码、模板、schema 或 Skill 正文，按本次用户需求独立写作 |
+| 原生 Skill | 固定提交内来源目录 | 选入原因／传递依赖 |
+| --- | --- | --- |
+| setup-matt-pocock-skills | skills/engineering/setup-matt-pocock-skills | 原生项目配置；完整保留 tracker 和 domain seed |
+| grill-with-docs | skills/engineering/grill-with-docs | 澄清入口，调用 grilling、domain-modeling |
+| grilling | skills/productivity/grilling | 澄清依赖；需要宿主子 Agent 能力 |
+| domain-modeling | skills/engineering/domain-modeling | 词汇与按需 ADR；保留 CONTEXT／ADR 格式参考 |
+| to-spec | skills/engineering/to-spec | 产品、实现和测试决定写入同一 spec；依赖 setup 配置 |
+| to-tickets | skills/engineering/to-tickets | 可验证交付及阻塞关系；依赖 setup 配置 |
+| implement | skills/engineering/implement | 原生调用 tdd、code-review；保留末尾提交动作，受任务授权约束 |
+| tdd | skills/engineering/tdd | 行为测试循环；条件引用 codebase-design |
+| codebase-design | skills/engineering/codebase-design | 模块接口与测试位置；保留两份设计参考 |
+| code-review | skills/engineering/code-review | 双轴子 Agent 审查；依赖 setup 配置，只覆盖 base...HEAD |
+| diagnosing-bugs | skills/engineering/diagnosing-bugs | 缺陷诊断补充；完整保留 scripts/hitl-loop.template.sh |
+| handoff | skills/productivity/handoff | 按需会话交接，原生默认写系统临时目录 |
 
-Matt 的 MIT 文本要求复制其软件或实质内容时保留版权和许可声明。后续若引入上游内容，应随文件保留完整声明、固定来源版本与改动说明；本次没有导入 Matt 的文件。agentic-delivery 的设计文档提及未来 LICENSE 文件不代表当前已有授权，后续复用前应重新核查或取得明确授权。
+`triage` 是 setup 对宿主已有能力的条件检查，`wayfinder` 是 tracker seed 的可选章节，`improve-codebase-architecture` 是 domain seed 对其他调用方的描述，均不是这条执行链必须调用的依赖，因此不导入。完整原生 seed 保留这些提及，不把它们描述成已安装能力。Skill 内真实 Markdown 资源引用已核对，围栏中的业务路径示例不属于包资源。
 
-本仓库尚未选择自身许可证，本次不擅自添加 LICENSE，也不把上游 MIT 声明当成本仓库整体许可。
+## 原生行为与项目配置
 
-## 实际阅读的参考文件与差异
+原生的显式触发标记和 `agents/openai.yaml` 原样保留；安装后需在宿主确认发现与路径，不能把文件存在当调用成功。本仓库不增加全局强制编排器。全局同名版本不覆盖，明确路径调用见 [项目接入](docs/project-setup.md)。
 
-以下是研究映射，不表示这些 Skills 已可在本仓库运行。链接固定到上表 commit。
+接入初始化复用原生 setup，安装脚本只链接、不代写项目规范。业务项目的 tracker／domain 配置可以按其 AGENTS 和已有文档布局调整；这是原生允许的项目配置，不是对原生 Skill 做补丁。spec 产品与技术决定合并，tickets 使用原生结构；原生提交、发布、确认步骤都受用户当前有效授权约束。
 
-| 来源文件 | 核对内容与本仓库处理 |
-| --- | --- |
-| [Matt · README.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/README.md) | Matt 的可组合 Skills 定位；作为后续能力组合基础。 |
-| [Matt · skills/productivity/grilling/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/productivity/grilling/SKILL.md) | 澄清方式参考；本仓库只要求关键决定确认，低风险细节可记录假设，不照搬穷尽询问及委派指令。 |
-| [Matt · skills/engineering/grill-with-docs/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/grill-with-docs/SKILL.md) | 实际转调 grilling 与 domain-modeling；本次仅阅读，没有调用。 |
-| [Matt · skills/engineering/domain-modeling/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/domain-modeling/SKILL.md) | 术语和重要决定参考；模块知识沿用业务项目权威文档，不强制新建词汇表或每任务 ADR。 |
-| [Matt · skills/engineering/to-spec/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/to-spec/SKILL.md) | 其 spec 同含产品与实现决定且会发布工单；本仓库分离 PRD 与技术方案，技术事实保留核查版本和入口，不沿用发布动作。 |
-| [Matt · skills/engineering/to-tickets/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/to-tickets/SKILL.md) | 独立验证与依赖拆分的概念适配；任务单增加实施证据，初始草稿，索引仅导航。 |
-| [Matt · skills/engineering/implement/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/implement/SKILL.md) | 含测试、评审及提交动作；未来适配需对齐用户授权、项目检查范围及任务记录，当前未执行。 |
-| [Matt · skills/engineering/tdd/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/engineering/tdd/SKILL.md) | 行为验证思路参考；单元测试不能替代产品所需的真实验收证据。 |
-| [Matt · skills/productivity/handoff/SKILL.md](https://github.com/mattpocock/skills/blob/3cca18b368ae95cdbdebbff572ccafa662551015/skills/productivity/handoff/SKILL.md) | 引用产物与去敏思路参考；存放位置由业务项目约定，不固定系统临时目录。 |
-| [agentic-delivery · README.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/README.md) | 核对现有 CLI／lifecycle／插件定位；本仓库不引入其运行系统。 |
-| [agentic-delivery · plugins/agentic-delivery/skills/delivery-workflow/references/artifact-contract.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/plugins/agentic-delivery/skills/delivery-workflow/references/artifact-contract.md) | 研究阶段产物及证据关系；本仓库仅形成手工交接约定，无 hash 门禁或状态机。 |
-| [agentic-delivery · plugins/agentic-delivery/skills/delivery-test/SKILL.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/plugins/agentic-delivery/skills/delivery-test/SKILL.md) | 研究证据限制与重测方向；没有采用其命令、门禁及额外逐步授权规则。 |
-| [agentic-delivery · plugins/agentic-delivery/templates/test-plan.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/plugins/agentic-delivery/templates/test-plan.md) | 仅研究，不复制模板；测试字段依据用户明确需求独立编写。 |
-| [agentic-delivery · plugins/agentic-delivery/templates/review.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/plugins/agentic-delivery/templates/review.md) | 仅研究，不引入额外必需评审报告；相关发现可记任务或测试文档。 |
-| [agentic-delivery · plugins/agentic-delivery/skills/delivery-archive/SKILL.md](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/plugins/agentic-delivery/skills/delivery-archive/SKILL.md) | 研究当前知识与历史证据的区别；本仓库使用权威模块文档同步，不引入 Ontology／Design Library 或多重发布机制。 |
+原生 implement 的 review 在 commit 之前，code-review 又只读取已提交差异。这一版本的覆盖限制通过最终交付 HEAD 再审查来显式处理，未提交范围保留未覆盖状态，不改原生正文。详见 [流程](workflow.md#版本证据与权限)。
 
-## README 绘图工具与模板复用
+## 本仓库新增
 
-- 来源：[cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)，本机已安装插件；核对 `.codex-plugin/plugin.json` 的版本为 **2.6.17**，本地 Git HEAD 为 `2724fd2efd8c6737f6fa704fbf5da52d67375497`。`SKILL.md` 的 metadata 标为 2.6，插件版本以 manifest 为准。相关跟踪文件无本地修改。
-- 许可证：本地根目录 [LICENSE](https://github.com/cathrynlavery/diagram-design/blob/2724fd2efd8c6737f6fa704fbf5da52d67375497/LICENSE) 为 MIT，Copyright (c) 2025 Cathryn Lavery。完整版权、许可及免责文字已嵌入 [HTML](docs/diagrams/workflow-overview.html) 与 [SVG](docs/diagrams/workflow-overview.svg) 的顶部注释，随单文件保留；不构成本仓库整体许可证。
-- 实质复用：[assets/template.html](https://github.com/cathrynlavery/diagram-design/blob/2724fd2efd8c6737f6fa704fbf5da52d67375497/skills/diagram-design/assets/template.html) 的页面骨架、HTML／CSS 样式。原文件 SHA-256：`78097811877b253fdf755867fd66efdb30ac93498f058c9b2c852a0fe333272a`。改动包括中文流程内容、七阶段与反馈布局、尺寸、无障碍描述及离线系统字体；删除 Google Fonts 链接，SVG 不注入外部字体。
-- 指导材料：`skills/diagram-design/SKILL.md`，以及其 `references/type-flowchart.md`、`semantic-patterns.md`、`style-guide.md`、`output-spec.md`、`export.md`；执行了 `scripts/self_check.py`，使用已有 Playwright／Chrome 渲染验证，未执行研发流程 Skills。
-- 图表内容来自本仓库 [workflow.md](workflow.md)，不是 diagram-design 提供的研发规范。未复用图标或字体文件；系统字体随查看环境回退，离线布局保持可读，跨平台字形可能不同。
+- `skills/sts-acceptance`：按已确认 spec 标准与当前证据验收，记录用户最终结论；按需使用其自包含模板。
+- `skills/sts-closeout`：整理实际交付与遗留，将确认知识同步到唯一权威模块文档；按需使用其自包含模板。
+- README、workflow、AGENTS、接入说明及透明项目链接／校验脚本为本仓库自有内容。未强制 R／AC 编号，未重建原生规格或任务模板。
 
-## 本次产物归属
+自定义 Skills 使用系统 skill-creator 指导编写，并运行其 quick_validate。原生导入使用系统 skill-installer helper；这两项开发辅助工具未复制进项目，也不是业务研发链的运行依赖。使用已有 Python、Playwright、Chrome 进行验证，没有安装第三方依赖。
 
-| 分类 | 本次内容 |
-| --- | --- |
-| 上游原样复用 | 保留 diagram-design 完整 MIT 许可声明；未导入 Matt／agentic-delivery 的 Skill、代码、模板或 schema |
-| 绘图模板适配 | docs/diagrams/workflow-overview.html 基于 diagram-design 的 assets/template.html 改写 HTML／CSS；SVG 从内联图导出，二者都内嵌版权与完整许可声明 |
-| 概念适配，中文独立表述 | Matt 的澄清、任务拆分、行为验证、轻量交接思路；agentic-delivery 仅作阶段证据与收尾知识的研究对照，未复制表达或结构 |
-| 按用户需求新增 | 七阶段流程；独立 PRD／方案；R／AC／T／TC 引用；产品验收；任务兼实施记录；小修改合并规则；版本与未提交改动证据；当前模块知识同步；八类模板及维护、使用说明 |
+## agentic-delivery：仅历史研究参考
 
-具体归属：[README.md](README.md)、[AGENTS.md](AGENTS.md)、本文件均为仓库专用新文档；[workflow.md](workflow.md) 及 [templates/](templates/README.md) 为按本次需求独立编写的初稿。所谓概念适配不代表已经完成研发 Skill 适配；diagram-design 仅用于文档绘图，不是本仓库的研发运行能力。
+来源：[RR9-cn/agentic-delivery](https://github.com/RR9-cn/agentic-delivery)，曾核对 commit `9573a3758e19c82925a580010d4d9d54a023a70a`。当时跟踪文件未发现 LICENSE／LICENCE／COPYING／NOTICE，[README](https://github.com/RR9-cn/agentic-delivery/blob/9573a3758e19c82925a580010d4d9d54a023a70a/README.md#status) 将最终许可证列为待定。
 
-## 后续 Skills 适配建议（未实施）
+曾阅读 README、`plugins/agentic-delivery/skills/delivery-workflow/references/artifact-contract.md`、delivery-test／delivery-archive 的 SKILL.md、templates/test-plan.md 与 review.md，用于理解阶段证据和当前知识。未复制其代码、模板、schema 或 Skill 正文，当前不是运行依赖；验收与知识补充依据用户需求独立编写。
 
-1. 先选少量 Matt 能力：澄清、spec 综合、任务拆分、实施／行为测试、会话交接；核对其传递调用、许可证和当前版本，不整套安装产生重名或冲突。
-2. 优先解决边界差异：to-spec 输出拆为 PRD 与方案；to-tickets 对接业务项目任务位置及草稿状态；implement 对齐项目检查、提交授权和实施记录；handoff 对接既有路径。
-3. 测试执行记录、逐 AC 产品验收、知识同步先用本仓库模板人工试跑；真实功能暴露重复操作后，再决定是否补成薄层 Skill。避免另建一套与 Matt 重叠的设计、开发、测试技能。
-4. 不直接复用 agentic-delivery 内容；若后续希望引入，先解决许可问题。继续保持模板约定与运行能力分开描述。
+## diagram-design：图表制作与模板复用
 
-仍需决定：本仓库自身许可证；首批适配范围与部署位置；Farvis 的具体试跑功能及产物位置。这些属于后续选择；本次绘图补充仅涉及本仓库文档与图表，未修改 Farvis。
+- [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design)，本地插件 manifest **2.6.17**，commit `2724fd2efd8c6737f6fa704fbf5da52d67375497`；Skill metadata 标为 2.6。
+- 本地 LICENSE 为 MIT，Copyright (c) 2025 Cathryn Lavery。完整版权和许可保留在 [HTML](docs/diagrams/workflow-overview.html) 与 [SVG](docs/diagrams/workflow-overview.svg) 顶部注释。
+- HTML／CSS 源自 `skills/diagram-design/assets/template.html`，其 SHA-256 为 `78097811877b253fdf755867fd66efdb30ac93498f058c9b2c852a0fe333272a`；修改内容、布局与系统字体，SVG 从 HTML 导出。图表达当前原生路线，无外部字体或图标文件依赖。
+- 采用 SKILL、flowchart、semantic-patterns、style-guide、output-spec、export 指导并执行 self_check；绘图 Skill 不作为业务研发 Skills 导入。
+
+本仓库自有内容的整体许可证仍待所有者选择。工具链安装及静态验证不等于真实业务测试、用户验收或 Farvis 接入完成。
