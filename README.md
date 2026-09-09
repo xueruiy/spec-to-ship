@@ -4,11 +4,25 @@
 
 已收录固定版本的 12 个 Matt Skills 和 2 个自定义 Skills，原生文件不改写。工具链文件与项目链接方式已做本地检查，尚不能据此宣称真实业务交付已验证。来源、许可证和逐文件校验见 [SOURCES.md](SOURCES.md) 与 [upstream-manifest.json](upstream-manifest.json)。
 
-## 流程总览
+## 如何使用
 
 ![原生 Matt Skills 到产品验收与知识同步](docs/diagrams/workflow-overview.svg)
 
-图中为用户按需显式调用的顺序与反馈，不是自动编排或程序化门禁。详细约定见 [workflow.md](workflow.md)。[可编辑 HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线打开；GitHub 展示的是源码。图表沿用 diagram-design 默认配色和系统字体。
+**一次接入，按任务进入研发循环，按证据完成验收与知识同步。** 这是一组可组合的研发能力，不是每个需求都必须依次执行的七步流程。
+
+- **首次接入**：安装只建立 Skills 入口；再调用原生 setup，按项目现状配置 tracker 与知识读取约定。
+- **日常研发**：从当前缺少的信息开始，复用已确认的讨论、spec 和 tickets。开发、测试和审查可以反复进行，发现规格变化就同步相关产物。
+- **交付收尾**：对照既定标准验收当前实现，记录用户决定，再将值得维护的知识更新到已有模块文档。未完成的任务也可以如实收尾。
+
+| 你手头已有的内容 | 从哪里开始 |
+| --- | --- |
+| 一个尚不清楚的新需求 | `grill-with-docs` 澄清，再用 `to-spec` 固化决定 |
+| 已确认且适用于当前代码的 spec | 需要分工或多个交付结果时用 `to-tickets`；简单工作不人为拆多份 |
+| 清楚、可实施的 ticket | `implement`，复用关联 spec；执行测试和规定的最终回归、审查 |
+| 一个已观察到的缺陷 | `diagnosing-bugs` 先复现定位，再修复并验证 |
+| 已实现、准备交付的功能 | 核对验证与审查证据，再用 `sts-acceptance` 和 `sts-closeout` |
+
+选择后面的入口意味着前面的信息已经足够，不意味着可以跳过缺失的标准、必要测试或产品验收。详细合同见 [workflow.md](workflow.md)。[可编辑 HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线打开；图表使用现有配色与系统字体。
 
 ## 快速开始
 
@@ -20,7 +34,7 @@
    ```
 
 2. 在业务项目下一轮会话检查可用 Skills 与路径。存在全局同名版本时，使用明确路径：`请使用 /绝对路径/业务项目/.agents/skills/setup-matt-pocock-skills/SKILL.md 配置本地 Markdown tracker。` 初次接入按 [项目接入](docs/project-setup.md) 核对 tracker、产物路径和知识职责，保留已有 AGENTS／CLAUDE 内容。
-3. 开始真实功能时依次按需调用：
+3. 根据任务选择入口；下表用于查找能力，不是必须逐行执行的清单：
 
    | 目的 | 用户入口 | 产物／结果 |
    | --- | --- | --- |
