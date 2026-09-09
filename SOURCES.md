@@ -59,4 +59,6 @@
 - HTML／CSS 源自 `skills/diagram-design/assets/template.html`，其 SHA-256 为 `78097811877b253fdf755867fd66efdb30ac93498f058c9b2c852a0fe333272a`；修改内容、布局与系统字体，SVG 从 HTML 导出。图表达按当前目标选择入口的使用方式，无外部字体或图标文件依赖。
 - 采用 SKILL、flowchart、semantic-patterns、style-guide、output-spec、export 指导并执行 self_check；绘图 Skill 不作为业务研发 Skills 导入。
 
+- 新增 [完整功能协作图](docs/diagrams/feature-collaboration.html)（swimlane）与 [产物与知识关系图](docs/diagrams/artifacts-and-knowledge.html)（architecture 关系布局）：依据本仓库已有约定独立编写图中文字与连线，沿用同一模板、配色和离线字体。HTML 与导出的 SVG 均保留上述 MIT 许可；同时参考相应图类型说明，不引入新的流程规则或运行能力。
+
 本仓库自有内容的整体许可证仍待所有者选择。工具链安装及静态验证不等于真实业务测试、用户验收或 Farvis 接入完成。

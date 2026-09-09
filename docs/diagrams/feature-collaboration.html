@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+Adapted from diagram-design 2.6.17, skills/diagram-design/assets/template.html
+Source commit: 2724fd2efd8c6737f6fa704fbf5da52d67375497
+Changes: Chinese workflow content, layout, offline system font stacks.
+
+MIT License
+
+Copyright (c) 2025 Cathryn Lavery
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>一次完整功能，如何一起推进</title><style>body{margin:0;background:#f5f5f5}main{max-width:960px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main><svg xmlns="http://www.w3.org/2000/svg" width="960" height="1072" viewBox="0 0 960 1072" role="img" aria-labelledby="feature-collaboration-title feature-collaboration-desc">
+<title id="feature-collaboration-title">一次完整功能，如何一起推进</title>
+<desc id="feature-collaboration-desc">用户提供目标与授权，Agent核对并推进可执行工作；关键产品决定和必要显式调用按需交互，实施验证持续循环，产品验收后记录实际结论并更新有效知识。</desc>
+<defs><marker id="feature-collaboration-arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#4f5d75"/></marker><marker id="feature-collaboration-arrow-accent" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#eb6c36"/></marker><marker id="feature-collaboration-arrow-link" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#2e5aa8"/></marker><style>
+text{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;fill:#2d3142}
+.title{font-family:'Songti SC',Georgia,serif;font-size:32px}.name{font-size:20px;font-weight:600}.sub{font-size:16px;fill:#4f5d75}
+.arrow{fill:none;stroke:#4f5d75;stroke-width:1.2;marker-end:url(#feature-collaboration-arrow)}
+</style></defs>
+<rect width="960" height="1072" fill="#f5f5f5"/>
+<text x="480" y="56" text-anchor="middle" class="title">一次完整功能，如何一起推进</text><text x="480" y="88" text-anchor="middle" class="sub">协作示意 · 小改动、只检查或暂停任务，不必走完此图</text><line x1="456" y1="128" x2="456" y2="936" stroke="#bfc0c0"/><text x="216" y="148" text-anchor="middle" class="name">用户</text><text x="708" y="148" text-anchor="middle" class="name">Agent</text><!-- 实线表示工作衔接；虚线是按需交流或返修，各连接使用独立端口。 --><path class="arrow" d="M368 232 H520"/><path class="arrow" d="M708 280 V480"/><path class="arrow" d="M520 256 H464 Q456 256 456 264 V344 Q456 352 448 352 H368" stroke-dasharray="4,4"/><path class="arrow" d="M368 408 H416 Q424 408 424 416 V520 Q424 528 432 528 H520" stroke-dasharray="4,4"/><path class="arrow" d="M708 576 V640"/><path class="arrow" d="M896 696 H920 Q928 696 928 688 V536 Q928 528 920 528 H896" stroke-dasharray="4,4"/><path class="arrow" d="M520 688 H368"/><path class="arrow" d="M368 752 H416 Q424 752 424 760 V872 Q424 880 432 880 H520"/><g class="edge-label"><rect x="716.0" y="348" width="160" height="24" fill="#f5f5f5"/><text x="796" y="368" text-anchor="middle" class="sub">已授权且依据足够</text></g><g class="edge-label"><rect x="368.0" y="308" width="80" height="24" fill="#f5f5f5"/><text x="408" y="328" text-anchor="middle" class="sub">按需提问</text></g><g class="edge-label"><rect x="424.0" y="484" width="88" height="24" fill="#f5f5f5"/><text x="468" y="504" text-anchor="middle" class="sub">答复／调用</text></g><g class="edge-label"><rect x="716.0" y="592" width="112" height="24" fill="#f5f5f5"/><text x="772" y="612" text-anchor="middle" class="sub">逐步验证</text></g><g class="edge-label"><rect x="376.0" y="644" width="128" height="24" fill="#f5f5f5"/><text x="440" y="664" text-anchor="middle" class="sub">当前证据与限制</text></g><g class="edge-label"><rect x="432.0" y="836" width="80" height="24" fill="#f5f5f5"/><text x="472" y="856" text-anchor="middle" class="sub">验收结论</text></g><g class="node"><rect x="64" y="184" width="304" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="216.0" y="220" text-anchor="middle" class="name">给出目标和已有材料</text><text x="216.0" y="248" text-anchor="middle" class="sub">说明本轮范围与授权</text></g><g class="node"><rect x="520" y="184" width="376" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="708.0" y="220" text-anchor="middle" class="name">核对事实，选择下一步</text><text x="708.0" y="248" text-anchor="middle" class="sub">复用有效依据，补真正缺口</text></g><g class="node"><rect x="64" y="320" width="304" height="128" rx="8" fill="#fae9e0" stroke="#eb6c36" stroke-dasharray="4,4"/><text x="216.0" y="356" text-anchor="middle" class="name">按需补充</text><text x="216.0" y="384" text-anchor="middle" class="sub">产品决定：回答范围与行为</text><text x="216.0" y="408" text-anchor="middle" class="sub">调用要求：显式触发所选 Skill</text></g><g class="node"><rect x="520" y="480" width="376" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="708.0" y="516" text-anchor="middle" class="name">实施当前可推进的工作</text><text x="708.0" y="544" text-anchor="middle" class="sub">必要时拆任务；不逐步重复确认</text></g><g class="node"><rect x="520" y="640" width="376" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="708.0" y="676" text-anchor="middle" class="name">验证与审查</text><text x="708.0" y="704" text-anchor="middle" class="sub">失败回实施；证据对应当前代码</text></g><g class="node"><rect x="64" y="664" width="304" height="112" rx="8" fill="#fae9e0" stroke="#eb6c36"/><text x="216.0" y="700" text-anchor="middle" class="name">作产品验收决定</text><text x="216.0" y="728" text-anchor="middle" class="sub">按事先标准看结果与证据</text><text x="216.0" y="752" text-anchor="middle" class="sub">未通过就定位问题并反馈</text></g><g class="node"><rect x="520" y="832" width="376" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="708.0" y="868" text-anchor="middle" class="name">记录结论，同步有效知识</text><text x="708.0" y="896" text-anchor="middle" class="sub">更新已有权威文档，或写无需更新</text></g><text x="480" y="976" text-anchor="middle" class="sub">原生调用受宿主与显式触发要求约束；箭头不代表 Skills 自动串行执行。</text><line x1="48" y1="1000" x2="912" y2="1000" stroke="#bfc0c0"/><path class="arrow" d="M64 1032 H120"/><text x="132" y="1036" text-anchor="start" class="sub">工作衔接</text><path class="arrow" d="M320 1032 H376" stroke-dasharray="4,4"/><text x="388" y="1036" text-anchor="start" class="sub">按需交流／返修</text><text x="912" y="1036" text-anchor="end" class="sub">规则依据：workflow.md</text>
+</svg></main></body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+Adapted from diagram-design 2.6.17, skills/diagram-design/assets/template.html
+Source commit: 2724fd2efd8c6737f6fa704fbf5da52d67375497
+Changes: Chinese workflow content, layout, offline system font stacks.
+
+MIT License
+
+Copyright (c) 2025 Cathryn Lavery
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>产物引用与当前知识</title><style>body{margin:0;background:#f5f5f5}main{max-width:960px;margin:auto}svg{display:block;width:100%;height:auto}</style></head><body><main><svg xmlns="http://www.w3.org/2000/svg" width="960" height="976" viewBox="0 0 960 976" role="img" aria-labelledby="artifacts-and-knowledge-title artifacts-and-knowledge-desc">
+<title id="artifacts-and-knowledge-title">产物引用与当前知识</title>
+<desc id="artifacts-and-knowledge-desc">已有PRD与技术文档或原生spec作为唯一权威依据，按需拆票并关联当前代码、验证和产品验收证据；收尾记录索引历史和更新依据，有效知识进入已有模块文档供后续任务优先读取。</desc>
+<defs><marker id="artifacts-and-knowledge-arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#4f5d75"/></marker><marker id="artifacts-and-knowledge-arrow-accent" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#eb6c36"/></marker><marker id="artifacts-and-knowledge-arrow-link" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#2e5aa8"/></marker><style>
+text{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;fill:#2d3142}
+.title{font-family:'Songti SC',Georgia,serif;font-size:32px}.name{font-size:20px;font-weight:600}.sub{font-size:16px;fill:#4f5d75}
+.arrow{fill:none;stroke:#4f5d75;stroke-width:1.2;marker-end:url(#artifacts-and-knowledge-arrow)}
+</style></defs>
+<rect width="960" height="976" fill="#f5f5f5"/>
+<text x="480" y="56" text-anchor="middle" class="title">产物引用与当前知识</text><text x="480" y="88" text-anchor="middle" class="sub">同一事实只留一个权威来源 · 这里表达关系，不是文件生成顺序</text><!-- 先画引用与更新路径；当前知识回到后续任务，不复制成第二套规格。 --><path class="arrow" d="M208 288 V480"/><path class="arrow" d="M488 288 V344" stroke-dasharray="4,4"/><path class="arrow" d="M384 400 H360 Q352 400 352 408 V448 Q352 456 344 456 H304 Q296 456 296 464 V480" stroke-dasharray="4,4"/><path class="arrow" d="M768 288 V480"/><path class="arrow" d="M352 544 H616"/><path class="arrow" d="M616 608 H576 Q568 608 568 616 V688 Q568 696 560 696 H416 Q408 696 408 704 V736"/><path class="arrow" d="M512 784 H640"/><path class="arrow" d="M896 784 H920 Q928 784 928 776 V136 Q928 128 920 128 H856 Q848 128 848 136 V160" stroke-dasharray="4,4"/><g class="edge-label"><rect x="104.0" y="364" width="96" height="24" fill="#f5f5f5"/><text x="152" y="384" text-anchor="middle" class="sub">实现依据</text></g><g class="edge-label"><rect x="784.0" y="364" width="112" height="24" fill="#f5f5f5"/><text x="840" y="384" text-anchor="middle" class="sub">验证验收依据</text></g><g class="edge-label"><rect x="412.0" y="512" width="144" height="24" fill="#f5f5f5"/><text x="484" y="532" text-anchor="middle" class="sub">当前版本与证据</text></g><g class="edge-label"><rect x="420.0" y="652" width="128" height="24" fill="#f5f5f5"/><text x="484" y="672" text-anchor="middle" class="sub">引用实际结果</text></g><g class="edge-label"><rect x="520.0" y="752" width="112" height="24" fill="#f5f5f5"/><text x="576" y="772" text-anchor="middle" class="sub">有依据才更新</text></g><g class="edge-label"><rect x="720.0" y="96" width="176" height="24" fill="#f5f5f5"/><text x="808" y="116" text-anchor="middle" class="sub">后续任务优先读取</text></g><g class="node"><rect x="64" y="160" width="832" height="128" rx="8" fill="#fae9e0" stroke="#eb6c36"/><text x="480.0" y="196" text-anchor="middle" class="name">本次任务的权威依据</text><text x="480.0" y="224" text-anchor="middle" class="sub">已有 PRD＋技术文档　或　原生 spec：复用足够材料，不重复生成</text><text x="480.0" y="248" text-anchor="middle" class="sub">行为、边界与事先标准；记录来源及仍待决定的部分</text></g><g class="node"><rect x="384" y="344" width="208" height="88" rx="8" fill="#ffffff" stroke="#4f5d75" stroke-dasharray="4,4"/><text x="488.0" y="380" text-anchor="middle" class="name">tickets（按需）</text><text x="488.0" y="408" text-anchor="middle" class="sub">独立交付与真实依赖</text></g><g class="node"><rect x="64" y="480" width="288" height="160" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="208.0" y="516" text-anchor="middle" class="name">当前代码</text><text x="208.0" y="544" text-anchor="middle" class="sub">实现与相关配置</text><text x="208.0" y="568" text-anchor="middle" class="sub">定位版本及未提交差异</text><text x="208.0" y="592" text-anchor="middle" class="sub">代码变化使相关旧证据失效</text></g><g class="node"><rect x="616" y="480" width="280" height="160" rx="8" fill="#ffffff" stroke="#4f5d75"/><line x1="632" y1="560" x2="880" y2="560" stroke="#bfc0c0"/><text x="756" y="512" text-anchor="middle" class="name">验证记录</text><text x="756" y="540" text-anchor="middle" class="sub">版本／环境 · 方法 · 实际证据</text><text x="756" y="588" text-anchor="middle" class="name">产品验收记录</text><text x="756" y="616" text-anchor="middle" class="sub">既定标准 · 结果 · 用户结论</text></g><g class="node"><rect x="64" y="736" width="448" height="96" rx="8" fill="#ffffff" stroke="#4f5d75"/><text x="288.0" y="772" text-anchor="middle" class="name">收尾记录与历史追溯</text><text x="288.0" y="800" text-anchor="middle" class="sub">索引实际产物、遗留事项及知识更新依据</text></g><g class="node"><rect x="640" y="736" width="256" height="96" rx="8" fill="#fae9e0" stroke="#eb6c36"/><text x="768.0" y="772" text-anchor="middle" class="name">当前模块知识</text><text x="768.0" y="800" text-anchor="middle" class="sub">更新既有权威文档</text></g><text x="480" y="872" text-anchor="middle" class="sub">验证、验收与收尾按需独立成文；小任务可留在已有任务或回复中。</text><line x1="48" y1="904" x2="912" y2="904" stroke="#bfc0c0"/><path class="arrow" d="M64 936 H120"/><text x="132" y="940" text-anchor="start" class="sub">依据／证据／更新</text><path class="arrow" d="M352 936 H408" stroke-dasharray="4,4"/><text x="420" y="940" text-anchor="start" class="sub">可选拆分／后续读取</text><text x="912" y="940" text-anchor="end" class="sub">历史用于追溯</text>
+</svg></main></body></html>

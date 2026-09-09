@@ -53,6 +53,8 @@ $sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继续未完成�
 
 完整的可复制开场、Agent 行为、用户参与点和完成产物见 **[场景使用指南](docs/usage-guide.md)**；范围、证据与原生调用规则以 [workflow.md](workflow.md) 为准。[HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线查看，GitHub 页面展示的是源码。
 
+想先看协作方式，读 [完整功能协作图](docs/usage-guide.md#一次完整功能如何协作)；想知道文档如何关联、知识如何保留，读 [产物与知识关系图](workflow.md#产物与知识关系)。
+
 ## 范围与目录
 
 - [skills/](skills/)：12 个原生 Skills，`sts-workflow`、`sts-acceptance`、`sts-closeout`；验收与收尾模板按需使用。
