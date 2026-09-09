@@ -1,5 +1,6 @@
 """真实运行项目链接命令，验证可读文件、幂等性及冲突保护。"""
 from pathlib import Path
+import json
 import subprocess
 import sys
 import tempfile
@@ -24,7 +25,8 @@ class ProjectInstallTests(unittest.TestCase):
             result = self.run_link(project)
             self.assertEqual(result.returncode, 0, result.stderr)
             source_skills = sorted(p for p in (ROOT / "skills").iterdir() if (p / "SKILL.md").is_file())
-            self.assertEqual(len(source_skills), 14)
+            native_names = {entry["name"] for entry in json.loads((ROOT / "upstream-manifest.json").read_text())["skills"]}
+            self.assertEqual({p.name for p in source_skills}, native_names | {"sts-workflow", "sts-acceptance", "sts-closeout"})
             before = {}
             for source in source_skills:
                 linked = project / ".agents/skills" / source.name
@@ -38,6 +40,27 @@ class ProjectInstallTests(unittest.TestCase):
             result = self.run_link(project)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(before, {p: p.lstat().st_mtime_ns for p in before})
+
+    def test_add_workflow_to_existing_installation(self) -> None:
+        """已有原生与验收收尾入口时，只增加新导航入口，保留所有旧链接。"""
+        with tempfile.TemporaryDirectory(prefix="sts-upgrade-") as temporary:
+            project = Path(temporary)
+            destination = project / ".agents/skills"
+            destination.mkdir(parents=True)
+            existing = {}
+            for skill in (ROOT / "skills").iterdir():
+                if (skill / "SKILL.md").is_file() and skill.name != "sts-workflow":
+                    target = destination / skill.name
+                    target.symlink_to(skill, target_is_directory=True)
+                    existing[target] = target.lstat().st_mtime_ns
+            self.assertEqual(len(existing), 14)
+            result = self.run_link(project, "--check")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse((destination / "sts-workflow").exists())
+            result = self.run_link(project)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual((destination / "sts-workflow").resolve(), ROOT / "skills/sts-workflow")
+            self.assertEqual(existing, {p: p.lstat().st_mtime_ns for p in existing})
 
     def test_conflict_preserves_user_files_without_partial_links(self) -> None:
         """后排序 Skill 冲突也必须在创建任何链接前失败。"""

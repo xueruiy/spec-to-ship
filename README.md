@@ -1,61 +1,62 @@
 # spec-to-ship
 
-面向个人与小团队的 AI 辅助研发接入仓库：**原生 Matt Skills 负责澄清、spec、tickets、实施、测试和审查；本仓库补充项目接入、产品验收与知识同步。**
+面向个人与小团队的 AI 辅助研发工具包。**原生 Matt Skills 负责澄清、规格、任务、实施与验证；spec-to-ship 补充入口选择、产品验收和知识同步。**
 
-已收录固定版本的 12 个 Matt Skills 和 2 个自定义 Skills，原生文件不改写。工具链文件与项目链接方式已做本地检查，尚不能据此宣称真实业务交付已验证。来源、许可证和逐文件校验见 [SOURCES.md](SOURCES.md) 与 [upstream-manifest.json](upstream-manifest.json)。
+包含固定版本的 **12 个 Matt Skills + 3 个自定义 Skills，共 15 个**。原生文件不改写，不要求每个任务走完整流程，也不要求把已有 PRD／技术文档重写成 spec。来源和逐文件校验见 [SOURCES.md](SOURCES.md) 与 [manifest](upstream-manifest.json)。
 
-## 如何使用
+## 1. 安装到业务项目
 
-![原生 Matt Skills 到产品验收与知识同步](docs/diagrams/workflow-overview.svg)
+保留本仓库的固定本地位置，用 Python 3.10+ 建立项目级链接：
 
-**一次接入，按任务进入研发循环，按证据完成验收与知识同步。** 这是一组可组合的研发能力，不是每个需求都必须依次执行的七步流程。
+```bash
+python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目 --check
+python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目
+```
 
-- **首次接入**：安装只建立 Skills 入口；再调用原生 setup，按项目现状配置 tracker 与知识读取约定。
-- **日常研发**：从当前缺少的信息开始，复用已确认的讨论、spec 和 tickets。开发、测试和审查可以反复进行，发现规格变化就同步相关产物。
-- **交付收尾**：对照既定标准验收当前实现，记录用户决定，再将值得维护的知识更新到已有模块文档。未完成的任务也可以如实收尾。
+脚本只链接 `.agents/skills/`，不安装全局、不修改业务规范。已安装旧版的项目重新运行即可增加 `sts-workflow`，已有冲突不会覆盖。进入下一轮会话后核对 15 个入口及实际路径；文件存在不等于宿主发现成功。同名全局版本和配置细节见 [项目接入](docs/project-setup.md)。
 
-| 你手头已有的内容 | 从哪里开始 |
-| --- | --- |
-| 一个尚不清楚的新需求 | `grill-with-docs` 澄清，再用 `to-spec` 固化决定 |
-| 已确认且适用于当前代码的 spec | 需要分工或多个交付结果时用 `to-tickets`；简单工作不人为拆多份 |
-| 清楚、可实施的 ticket | `implement`，复用关联 spec；执行测试和规定的最终回归、审查 |
-| 一个已观察到的缺陷 | `diagnosing-bugs` 先复现定位，再修复并验证 |
-| 已实现、准备交付的功能 | 核对验证与审查证据，再用 `sts-acceptance` 和 `sts-closeout` |
+## 2. 首次初始化
 
-选择后面的入口意味着前面的信息已经足够，不意味着可以跳过缺失的标准、必要测试或产品验收。详细合同见 [workflow.md](workflow.md)。[可编辑 HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线打开；图表使用现有配色与系统字体。
+在业务项目明确调用原生 setup：
 
-## 快速开始
+```text
+请使用 /绝对路径/业务项目/.agents/skills/setup-matt-pocock-skills/SKILL.md，
+检查已有 AGENTS、CLAUDE 和文档约定，配置 Local Markdown tracker 与知识读取入口。
+保留已有权威规范，不复制第二套规则。
+```
 
-1. 将本仓库保留在固定本地位置，在业务项目创建链接。命令中的路径替换为实际绝对路径，不改全局 Skills：
+初始化与安装分开，已有配置不必每个任务重跑。原生 setup 根据项目现状展示并确认配置，无需先手写模板。
 
-   ```bash
-   python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目 --check
-   python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目
-   ```
+## 3. 开始一个任务
 
-2. 在业务项目下一轮会话检查可用 Skills 与路径。存在全局同名版本时，使用明确路径：`请使用 /绝对路径/业务项目/.agents/skills/setup-matt-pocock-skills/SKILL.md 配置本地 Markdown tracker。` 初次接入按 [项目接入](docs/project-setup.md) 核对 tracker、产物路径和知识职责，保留已有 AGENTS／CLAUDE 内容。
-3. 根据任务选择入口；下表用于查找能力，不是必须逐行执行的清单：
+不确定入口时，用 `sts-workflow` 说明目标、已有材料和本次范围：
 
-   | 目的 | 用户入口 | 产物／结果 |
-   | --- | --- | --- |
-   | 澄清目标与决定 | `$grill-with-docs` | 已澄清讨论，按需更新词汇／重要决定 |
-   | 整理统一规格 | `$to-spec` | `.scratch/<feature>/spec.md`，含产品、实现、测试决定 |
-   | 拆分交付结果 | `$to-tickets` | `.scratch/<feature>/issues/<NN>-<slug>.md` |
-   | 实施与测试循环 | `$implement`；缺陷按需 `$diagnosing-bugs` | 代码、测试结果；原生调用 tdd 与 code-review |
-   | 最终回归与审查 | 执行项目约定回归，再 `$code-review` 并给出基线和 spec 路径 | 对应当前版本的检查结果和审查意见 |
-   | 产品验收 | `$sts-acceptance` | 引用 spec 标准及当前证据的验收记录 |
-   | 收尾知识同步 | `$sts-closeout` | 交付入口、遗留事项、当前模块知识更新 |
+```text
+$sts-workflow 我想改善客户资料的重复录入，现有说明在 docs/customer.md。
+请先判断还缺哪些产品决定，这轮只澄清，不改代码。
+```
 
-短名仅在会话已确认对应本项目路径时使用；否则将入口写成上面的绝对 `SKILL.md` 路径，依赖也选同目录固定版本。无需每个目的换会话；不要让导航器强制逐一调用所有 Skills。简单工作不强制拆多张 tickets。换会话时才用 `$handoff`。
+已有清楚任务可以直接继续：
 
-原生 `implement` 包含提交动作；先沿用或明确该任务的提交授权。原生 `code-review` 用 `base...HEAD` 审查已提交差异：最终验收前，审查必须覆盖交付 HEAD，未提交变更不能假称已覆盖。细节见 [流程中的版本与权限](workflow.md#版本证据与权限)。
+```text
+$sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继续未完成的导入功能。
+复用已有材料，不重写 spec；先核对当前代码与证据，暂不提交。
+```
+
+`sts-workflow` 负责选择下一步：明确小改动可直接处理；原生调用条件与宿主能力允许时衔接所选 Skill，需要显式触发时给你下一条具体调用指令。**它不会无条件自动跑完所有原生 Skills。** 熟悉入口后仍可直接调用 `implement`、`diagnosing-bugs`、`code-review` 等。
+
+短名只在路径已确认时使用；有歧义请改为 `请使用 /绝对路径/业务项目/.agents/skills/sts-workflow/SKILL.md ……`，依赖也绑定同一项目目录。
+
+## 从哪里进入
+
+![根据目标、已有材料与授权选择入口](docs/diagrams/workflow-overview.svg)
+
+完整的可复制开场、Agent 行为、用户参与点和完成产物见 **[场景使用指南](docs/usage-guide.md)**；范围、证据与原生调用规则以 [workflow.md](workflow.md) 为准。[HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线查看，GitHub 页面展示的是源码。
 
 ## 范围与目录
 
-- [skills/](skills/)：12 个原生目录及 `sts-acceptance`、`sts-closeout`；补充模板各自在 Skill 内自包含。
-- [docs/project-setup.md](docs/project-setup.md)：业务项目接入、最小配置、同名冲突与知识分工。
-- [workflow.md](workflow.md)：当前单一路线、反馈和证据约定。
-- [SOURCES.md](SOURCES.md)、[upstream-manifest.json](upstream-manifest.json)、[licenses/](licenses/)：来源和许可。
-- [AGENTS.md](AGENTS.md)：只规定本仓库维护要求。
+- [skills/](skills/)：12 个原生 Skills，`sts-workflow`、`sts-acceptance`、`sts-closeout`；验收与收尾模板按需使用。
+- [项目接入](docs/project-setup.md) · [场景指南](docs/usage-guide.md) · [流程合同](workflow.md)。
+- [来源](SOURCES.md) · [逐文件 manifest](upstream-manifest.json) · [许可证](licenses/) · [维护要求](AGENTS.md)。
 
-业务项目保留真实任务、代码证据和模块知识。本仓库不提供第二套 PRD／技术方案／任务模板，不强制 R／AC 编号，不建设流程 CLI、看板、状态机、复杂知识库或 OpenSpec。原生 Skills 是否成功发现及真实业务执行结果需在目标宿主验证。
+业务知识和真实产物留在业务项目。本仓库不建立流程 CLI、看板、状态机或全局控制器。原生 `implement` 含提交动作，`code-review` 仅覆盖已提交差异，均需遵守 [版本与权限合同](workflow.md#版本证据与权限)。工具链检查及隔离场景试用不能替代目标宿主发现、真实业务验证或用户验收。
