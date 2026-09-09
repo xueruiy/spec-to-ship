@@ -4,23 +4,23 @@
 
 包含固定版本的 **12 个 Matt Skills + 3 个自定义 Skills，共 15 个**。原生文件不改写，不要求每个任务走完整流程，也不要求把已有 PRD／技术文档重写成 spec。来源和逐文件校验见 [SOURCES.md](SOURCES.md) 与 [manifest](upstream-manifest.json)。
 
-## 1. 安装到业务项目
+## 1. 安装 Codex 插件
 
-保留本仓库的固定本地位置，用 Python 3.10+ 建立项目级链接：
+本仓库通过 repo marketplace 分发完整插件，不再逐项目创建 15 个软链接。先注册本地仓库，再安装：
 
 ```bash
-python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目 --check
-python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/业务项目
+codex plugin marketplace add /绝对路径/spec-to-ship
+codex plugin add spec-to-ship@personal
 ```
 
-脚本只链接 `.agents/skills/`，不安装全局、不修改业务规范。已安装旧版的项目重新运行即可增加 `sts-workflow`，已有冲突不会覆盖。进入下一轮会话后核对 15 个入口及实际路径；文件存在不等于宿主发现成功。同名全局版本和配置细节见 [项目接入](docs/project-setup.md)。
+`personal` 是本仓库 marketplace 的名称；若本机已有另一个同名 marketplace，先核对来源，不覆盖已有配置。安装后在新任务中核对插件来源、15 个入口及实际路径。插件安装不生成业务文档、不写项目规范；首次配置在业务项目中单独执行。发现、版本更新和旧链接迁移见 [项目接入](docs/project-setup.md)。
 
 ## 2. 首次初始化
 
 在业务项目明确调用原生 setup：
 
 ```text
-请使用 /绝对路径/业务项目/.agents/skills/setup-matt-pocock-skills/SKILL.md，
+请显式使用 $spec-to-ship:setup-matt-pocock-skills，
 检查已有 AGENTS、CLAUDE 和文档约定，配置 Local Markdown tracker 与知识读取入口。
 保留已有权威规范，不复制第二套规则。
 ```
@@ -34,20 +34,20 @@ python3 /绝对路径/spec-to-ship/scripts/link-project-skills.py /绝对路径/
 不确定入口时，用 `sts-workflow` 说明目标、已有材料和本次范围：
 
 ```text
-$sts-workflow 我想改善客户资料的重复录入，现有说明在 docs/customer.md。
+$spec-to-ship:sts-workflow 我想改善客户资料的重复录入，现有说明在 docs/customer.md。
 请先判断还缺哪些产品决定，这轮只澄清，不改代码。
 ```
 
 已有清楚任务可以直接继续：
 
 ```text
-$sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继续未完成的导入功能。
+$spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继续未完成的导入功能。
 复用已有材料，不重写 spec；先核对当前代码与证据，暂不提交。
 ```
 
 `sts-workflow` 负责选择下一步：明确小改动可直接处理；原生调用条件与宿主能力允许时衔接所选 Skill，需要显式触发时给你下一条具体调用指令。**它不会无条件自动跑完所有原生 Skills。** 熟悉入口后仍可直接调用 `implement`、`diagnosing-bugs`、`code-review` 等。
 
-短名只在路径已确认时使用；有歧义请改为 `请使用 /绝对路径/业务项目/.agents/skills/sts-workflow/SKILL.md ……`，依赖也绑定同一项目目录。
+短名只在插件来源已确认时使用；有歧义时明确指定 spec-to-ship 插件，并使用宿主报告的当前插件内 Skill 绝对路径。依赖绑定同一插件，业务材料始终读取当前业务项目。
 
 ## 从哪里进入
 
@@ -59,8 +59,9 @@ $sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继续未完成�
 
 ## 范围与目录
 
-- [skills/](skills/)：12 个原生 Skills，`sts-workflow`、`sts-acceptance`、`sts-closeout`；验收与收尾模板按需使用。
+- [插件包](plugins/spec-to-ship/)：12 个原生 Skills，`sts-workflow`、`sts-acceptance`、`sts-closeout`；验收与收尾模板按需使用。
+- [repo marketplace](.agents/plugins/marketplace.json) · [插件清单](plugins/spec-to-ship/.codex-plugin/plugin.json)。
 - [项目接入](docs/project-setup.md) · [场景指南](docs/usage-guide.md) · [流程合同](workflow.md)。
-- [来源](SOURCES.md) · [逐文件 manifest](upstream-manifest.json) · [许可证](licenses/) · [维护要求](AGENTS.md)。
+- [来源](SOURCES.md) · [逐文件 manifest](upstream-manifest.json) · [随包许可证](plugins/spec-to-ship/licenses/) · [维护要求](AGENTS.md)。
 
 业务知识和真实产物留在业务项目。本仓库不建立流程 CLI、看板、状态机或全局控制器。原生 `implement` 含提交动作，`code-review` 仅覆盖已提交差异，均需遵守 [版本与权限合同](workflow.md#版本证据与权限)。工具链检查及隔离场景试用不能替代目标宿主发现、真实业务验证或用户验收。

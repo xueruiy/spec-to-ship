@@ -1,0 +1,21 @@
+{
+  "name": "spec-to-ship",
+  "version": "0.1.0+codex.20260909121949",
+  "description": "\u9762\u5411\u4e2a\u4eba\u4e0e\u5c0f\u56e2\u961f\u7684 AI \u8f85\u52a9\u7814\u53d1\uff1a\u539f\u751f Matt Skills\u3001\u4efb\u52a1\u5165\u53e3\u3001\u4ea7\u54c1\u9a8c\u6536\u4e0e\u77e5\u8bc6\u540c\u6b65\u3002",
+  "author": {
+    "name": "xueruiy"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "spec-to-ship",
+    "shortDescription": "\u6309\u4efb\u52a1\u9009\u5165\u53e3\uff0c\u590d\u7528 Matt Skills\uff0c\u4fdd\u7559\u9a8c\u6536\u4e0e\u6709\u6548\u77e5\u8bc6\u3002",
+    "longDescription": "\u5305\u542b\u56fa\u5b9a\u7248\u672c\u7684 12 \u4e2a\u539f\u751f Matt Skills \u4e0e 3 \u4e2a sts Skills\u3002\u6309\u5df2\u6709\u6750\u6599\u548c\u6388\u6743\u63a8\u8fdb\uff0c\u4e0d\u5f3a\u5236\u5b8c\u6574\u9636\u6bb5\u94fe\uff1b\u63d2\u4ef6\u5b89\u88c5\u4e0e\u4e1a\u52a1\u9879\u76ee\u521d\u59cb\u5316\u5206\u5f00\u3002",
+    "developerName": "xueruiy",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "\u7528 $spec-to-ship:sts-workflow \u6838\u5bf9\u76ee\u6807\u3001\u5df2\u6709\u6750\u6599\u4e0e\u6388\u6743\uff0c\u5224\u65ad\u4e0b\u4e00\u6b65\u3002"
+    ]
+  },
+  "repository": "https://github.com/xueruiy/spec-to-ship"
+}

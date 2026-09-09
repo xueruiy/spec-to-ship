@@ -39,7 +39,7 @@ text{font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei','Noto S
 </defs>
 <rect width="960" height="1088" fill="#f5f5f5"/>
 <text x="480" y="56" text-anchor="middle" class="title">从这轮任务选择入口</text>
-<text x="480" y="88" text-anchor="middle" class="sub">首次接入：安装 → 原生 setup　·　日常：统一入口或直接调用原生</text>
+<text x="480" y="88" text-anchor="middle" class="sub">首次接入：插件 → 原生 setup　·　日常：统一入口或直接调用原生</text>
 <!-- 先画路径，所有分支有独立端口；标签遮罩与线条相隔 8px。 -->
 <path class="arrow" d="M480 192 V240"/>
 <path class="arrow" d="M624 304 H704"/>

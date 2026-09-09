@@ -1,12 +1,12 @@
 # 来源、版本与复用边界
 
-核对日期：2026-09-09。当前实现采用固定版本原生 Matt Skills，辅以项目链接、按任务选择入口、产品验收及知识同步。没有第二套 PRD／技术方案／tickets 流程；旧 `templates/` 已删除，历史记录仅保留在 Git 历史。
+核对日期：2026-09-09。当前实现采用固定版本原生 Matt Skills，通过 Codex 插件整包分发，辅以项目接入、按任务选择入口、产品验收及知识同步。没有第二套 PRD／技术方案／tickets 流程；旧 `templates/` 已删除，历史记录仅保留在 Git 历史。
 
 ## Matt Skills：原生导入
 
 - 来源：[mattpocock/skills](https://github.com/mattpocock/skills)，固定 commit `3cca18b368ae95cdbdebbff572ccafa662551015`（2026-09-04T09:43:27+01:00）。本次固定此版本，不宣称它是未来最新版本。
-- 使用系统 skill-installer 的 `install-skill-from-github.py --repo mattpocock/skills --ref 3cca18b368ae95cdbdebbff572ccafa662551015 --dest /绝对路径/spec-to-ship/skills --path ...` 导入下表完整目录，保留正文、agents 元数据、references、模板与脚本，不改写原生文件。
-- [完整 MIT 许可证](licenses/mattpocock-skills.LICENSE)：Copyright (c) 2026 Matt Pocock，适用于导入内容。所有原生来源路径、本地路径、逐文件 SHA-256、选入原因和依赖见 [upstream-manifest.json](upstream-manifest.json)。复制这些原生目录时应同时保留该许可，不将其视为本仓库全部自有内容的许可证。
+- 此前使用系统 skill-installer 的 `install-skill-from-github.py --repo mattpocock/skills --ref 3cca18b368ae95cdbdebbff572ccafa662551015 --dest /绝对路径/spec-to-ship/skills --path ...` 导入下表完整目录；现整体迁移到 `plugins/spec-to-ship/skills/`，保留正文、agents 元数据、references、模板与脚本，不改写原生文件。
+- [完整 MIT 许可证](plugins/spec-to-ship/licenses/mattpocock-skills.LICENSE)：Copyright (c) 2026 Matt Pocock，适用于导入内容。所有原生来源路径、本地路径、逐文件 SHA-256、选入原因和依赖见 [upstream-manifest.json](upstream-manifest.json)。复制这些原生目录时应同时保留该许可，不将其视为本仓库全部自有内容的许可证。
 - [verify-upstream.py](scripts/verify-upstream.py) 校验 36 个原生文件及许可证的 hash、文件集合、依赖和资源链接。加 `--source /上游Git目录` 可直接用固定 commit 的 `git show` 字节对比，而非只信任本地 manifest。
 
 | 原生 Skill | 固定提交内来源目录 | 选入原因／传递依赖 |
@@ -30,7 +30,7 @@
 
 原生的显式触发标记和 `agents/openai.yaml` 原样保留；安装后需在宿主确认发现与路径，不能把文件存在当调用成功。本仓库不增加全局强制编排器。全局同名版本不覆盖，明确路径调用见 [项目接入](docs/project-setup.md)。
 
-接入初始化复用原生 setup，安装脚本只链接、不代写项目规范。业务项目的 tracker／domain 配置可以按其 AGENTS 和已有文档布局调整；这是原生允许的项目配置，不是对原生 Skill 做补丁。需要新建 spec 时产品与技术决定合并，tickets 使用原生结构；已有足够的 PRD／技术文档不重复转写，继续引用实际权威依据。原生提交、发布、确认步骤都受用户当前有效授权约束。
+接入初始化复用原生 setup，插件安装只准备能力、不代写项目规范。业务项目的 tracker／domain 配置可以按其 AGENTS 和已有文档布局调整；这是原生允许的项目配置，不是对原生 Skill 做补丁。需要新建 spec 时产品与技术决定合并，tickets 使用原生结构；已有足够的 PRD／技术文档不重复转写，继续引用实际权威依据。原生提交、发布、确认步骤都受用户当前有效授权约束。
 
 原生 implement 的 review 在 commit 之前，code-review 又只读取已提交差异。这一版本的覆盖限制通过最终交付 HEAD 再审查来显式处理，未提交范围保留未覆盖状态，不改原生正文。详见 [流程](workflow.md#版本证据与权限)。
 
@@ -38,13 +38,21 @@
 
 当前包含 12 个原生 Skill 与 3 个自定义 Skill，共 15 个。原生 manifest 只记录上游内容，自定义内容由 Git 跟踪。
 
-- `skills/sts-workflow`：根据目标、已有材料、证据和授权选择最小足够入口，衔接原生或补充能力；保留原生显式触发限制，不承诺自动运行完整链。
+- `plugins/spec-to-ship/skills/sts-workflow`：根据目标、已有材料、证据和授权选择最小足够入口，衔接原生或补充能力；保留原生显式触发限制，不承诺自动运行完整链。
 
-- `skills/sts-acceptance`：按已确认 spec 或等价材料标准与当前证据验收，记录用户最终结论；按需使用其自包含模板。
-- `skills/sts-closeout`：整理实际交付与遗留，将确认知识同步到唯一权威模块文档；按需使用其自包含模板。
-- README、workflow、AGENTS、接入说明、场景指南及透明项目链接／校验脚本为本仓库自有内容。未强制 R／AC 编号，未重建原生规格或任务模板；小任务不强制验收和收尾文件。
+- `plugins/spec-to-ship/skills/sts-acceptance`：按已确认 spec 或等价材料标准与当前证据验收，记录用户最终结论；按需使用其自包含模板。
+- `plugins/spec-to-ship/skills/sts-closeout`：整理实际交付与遗留，将确认知识同步到唯一权威模块文档；按需使用其自包含模板。
+- README、workflow、AGENTS、接入说明、场景指南及插件元数据与校验脚本为本仓库自有内容。未强制 R／AC 编号，未重建原生规格或任务模板；小任务不强制验收和收尾文件。
 
-自定义 Skills 使用系统 skill-creator 指导编写，并运行其 quick_validate。原生导入使用系统 skill-installer helper；这两项开发辅助工具未复制进项目，也不是业务研发链的运行依赖。使用已有 Python、Playwright、Chrome 进行验证，没有安装第三方依赖。
+自定义 Skills 使用系统 skill-creator 指导编写，并运行其 quick_validate。原生导入使用系统 skill-installer helper；这些开发辅助工具未复制进项目，也不是业务研发链的运行依赖。使用已有 Python、Playwright、Chrome 进行验证，没有安装第三方依赖。
+
+## Codex 插件打包
+
+使用本地系统 plugin-creator 的 `create_basic_plugin.py` 创建 [插件清单](plugins/spec-to-ship/.codex-plugin/plugin.json) 与 [repo marketplace](.agents/plugins/marketplace.json)，沿用 helper 默认的 `personal` 名称。包根是 `plugins/spec-to-ship`，包含唯一一份 15 个 Skills 和 Matt MIT 许可；`upstream-manifest.json` 只变更本地路径与包根，来源路径、固定 commit 和 SHA-256 保持不变。
+
+3 个 sts 的依赖解析适配为同一插件的相对资源与实际安装路径；业务规则、配置和产物继续留在业务项目。旧 `link-project-skills.py` 和对应安装测试移除，改为插件包校验测试，不保留第二套安装方式。不为插件添加 MCP、apps 或自动业务配置。
+
+plugin-creator 的完整校验目前拒绝 6 个原生 `disable-model-invocation: true` 标记。保留原生文件并记录此兼容性限制，不通过改写标记制造“校验通过”；包结构、原生字节、实际宿主发现分别验证。当前 Codex 实际安装与 `skills/list` 强制刷新已发现全部 15 个限定名称入口（`spec-to-ship:<name>`），均启用且无发现错误；测试精确核对 helper 仅返回上述 6 项差异，任何其他错误均失败。安装与发现结果不能替代完整原生流程验证。
 
 ## agentic-delivery：仅历史研究参考
 

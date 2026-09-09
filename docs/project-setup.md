@@ -1,50 +1,61 @@
 # 业务项目接入
 
-本仓库统一维护原生 Skill 副本；安装链接与项目初始化是两件事。链接脚本仅准备项目技能入口，不初始化配置；用户随后显式调用原生 setup 探索与配置，真实产物留在业务项目。入口是用户选择的 Skill，不是全局控制器。安装需要 Python 3.10+，无第三方依赖。当前共 15 个 Skills：12 个原生和 3 个 sts 补充入口。
+Codex 以插件安装本仓库的 15 个 Skills：12 个原生和 3 个 sts 补充入口。插件包与业务项目分开：安装准备能力，用户显式调用原生 setup 才配置业务项目；`docs/agents/`、`.scratch/` 和已有 `doc/`／`docs/` 均保留在业务项目。插件不是全局控制器，不自动写入这些目录。
 
-## 链接与版本选择
+## 插件安装与版本选择
 
-在业务项目已存在、没有其他同名项目 Skill 的前提下执行 README 的链接命令。[link-project-skills.py](../scripts/link-project-skills.py) 将本仓库每个 Skill 目录链接到目标项目 `.agents/skills/<name>`；`--check` 不写入。所有冲突在写入前检查，已指向同一源的链接可重复运行，不覆盖其他文件或软链接，也不跟随重定向的 `.agents` 目录。
+[repo marketplace](../.agents/plugins/marketplace.json) 指向 [plugins/spec-to-ship](../plugins/spec-to-ship/)，原生与自定义 Skills 及 Matt MIT 许可随同一包分发。先按 README 注册本地仓库并安装，使用 `codex plugin marketplace list` 和 `codex plugin list` 核对来源。新任务中确认宿主发现 15 个 Skill，以及它们实际来自当前 spec-to-ship 插件；包文件存在和安装成功都不能代替入口发现检查。
 
-本地源目录必须持续存在。链接依赖本机绝对路径，不应作为可移植安装包提交到其他机器；每位成员检出相同仓库版本后在自己的项目运行命令。若要忽略本地链接，可按项目已有 Git 约定管理，脚本不会改 `.gitignore` 或 Git 配置。移动源仓库后先人工核对旧链接再重建，不用强制覆盖。
+本仓库 marketplace 默认名为 `personal`，文件在本仓库 `.agents/plugins/marketplace.json`，不是自动发现的用户级同名文件。若另一来源已占用此名称，先核对冲突，不能用本仓库覆盖它。插件安装进入 Codex 管理的缓存；本地仓库保留为更新来源，不把缓存路径硬编码为业务规范。
 
-脚本会只读提示 `~/.codex/skills` 与 `~/.agents/skills` 中的同名入口，但这不是宿主全部插件源的完整清单。全局同名 Skill 可能仍被发现；**不假定项目版本必然覆盖全局版本**。下一轮会话核对可用 Skill 的实际路径。若短名歧义，显式给出：
+有同名全局或旧项目 Skill 时，不假定覆盖顺序。明确选择 spec-to-ship 插件；必要时使用宿主报告的当前插件实际路径：
 
 ```text
-请使用 /绝对路径/业务项目/.agents/skills/grill-with-docs/SKILL.md 澄清本功能。
-其 grilling、domain-modeling 及后续所有 Matt 依赖均从这个项目的 .agents/skills 目录读取，
-不要选择同名全局旧版本；实际执行仍遵从本项目 AGENTS 和本次授权。
+请显式使用 $spec-to-ship:grill-with-docs 澄清本功能。
+先核对实际 Skill 路径；grilling、domain-modeling 等依赖都从同一插件读取。
+业务规范和需求材料读取当前项目，不写入插件缓存。
 ```
 
-这是明确路径调用，不声称宿主已注册成功。宿主无法发现或读取路径、不能执行原生依赖调用／子 Agent 时报告具体限制，不把工具链存在当执行成功。重新运行链接脚本会为已有 14 个入口的项目增加 sts-workflow；已有链接保留，下一轮会话仍需核对发现与路径。不自动改原生文件绕过该限制。
+原生显式调用策略不因打包而改变。宿主未发现某个入口、无法执行子 Agent 或 Skill 调用时，报告具体缺口；不能改原生正文绕过，也不能拿其他同名旧版本冒充。
+
+### 当前兼容性核对
+
+本次 Codex 实际安装后，`skills/list` 强制刷新发现 15 个 `spec-to-ship:<Skill名>` 入口，均启用且来源为 `spec-to-ship@personal`，没有发现错误。使用这些限定名称可区分同名入口；这证明当前宿主发现，不等于已执行所有 Skills 或完成业务初始化。
+
+系统 plugin-creator 完整校验器仍拒绝 6 个原生 `disable-model-invocation: true` 标记。已保留上游原文；测试只核对错误集合恰好是这 6 项，出现任何其他错误仍失败。不能把这项已知差异描述为 helper 完整校验通过。升级 Codex 或 helper 后应重新核对。
+
+### 更新插件
+
+本地源文件变化不等于已安装缓存更新。维护者使用 plugin-creator 的 `read_marketplace_name.py --marketplace-path <本仓库 marketplace.json>` 核对名称，运行 `update_plugin_cachebuster.py <本仓库插件目录>` 更新缓存版本，再通过原生 `codex plugin add <插件名>@<已确认的本地 marketplace 名>` 重装。在新任务中重新核对发现与来源，不手改 Codex 缓存或 marketplace 配置。常规安装者使用维护者提供的包版本；这些开发 helper 不属于业务流程依赖。
+
+### 从旧项目链接迁移
+
+旧链接安装脚本已停止维护，本仓库只保留插件路线。先记录旧项目 `.agents/skills/` 中确实指向原 spec-to-ship `skills/<name>` 的链接及目标，再安装并核对插件发现。获得迁移授权后，仅移除目标仍与记录一致的这 15 个旧软链接；同名普通目录、其他链接及用户文件保留，不能整目录删除。根仓库迁移后，旧链接可能暂时失效，应以已记录的链接目标识别，不据“失效”直接清理。
+
+业务配置中的旧技能路径改为当前插件来源约定；`docs/agents/issue-tracker.md`、`domain.md`、`.scratch/` 和已有业务文档继续使用。插件迁移不重新初始化业务项目，不移动任务或知识文档，也不清理全局同名 Skills。
 
 ## 首次配置
 
-用户调用项目路径下的 setup-matt-pocock-skills，明确选择 **Local Markdown**。原生 Skill 探索项目后展示配置，按其确认步骤及本次已有授权写入；原生默认优先编辑已有 CLAUDE.md，否则 AGENTS.md。若项目规定 CLAUDE.md 只是指向 AGENTS.md 的引用入口，先遵守该项目规则与已有授权，在唯一权威入口维护配置，保留引用，不把新规则复制到两个文件；不为这一项目差异改写原生 Skill。
+用户显式调用已确认插件来源的 setup-matt-pocock-skills，明确选择 **Local Markdown**。原生 Skill 探索项目后展示配置，按其确认步骤及本次已有授权写入；原生默认优先编辑已有 CLAUDE.md，否则 AGENTS.md。若项目规定 CLAUDE.md 只是指向 AGENTS.md 的引用入口，先遵守该项目规则与已有授权，在唯一权威入口维护配置，保留引用，不把新规则复制到两个文件；不为这一项目差异改写原生 Skill。
 
 下面是原生 setup 应生成或更新的最小配置说明，不要求用户安装前手写，也不另提供第二套初始化模板：
 
-- `docs/agents/issue-tracker.md`：从原生 [本地 tracker 模板](../skills/setup-matt-pocock-skills/issue-tracker-local.md) 起步，说明 spec 为 `.scratch/<feature>/spec.md`，tickets 为 `issues/<NN>-<slug>.md`，publish 表示写本地文件。
-- `docs/agents/domain.md`：从原生 [领域配置](../skills/setup-matt-pocock-skills/domain.md) 起步，指向当前已有知识位置，文件不存在时不为凑目录提前生成 CONTEXT／ADR。
-- 现有 Agent skills 配置块：链接上述配置，并明确项目固定版本目录与业务规则入口，不覆盖其他规则。
+- `docs/agents/issue-tracker.md`：从原生 [本地 tracker 模板](../plugins/spec-to-ship/skills/setup-matt-pocock-skills/issue-tracker-local.md) 起步，说明 spec 为 `.scratch/<feature>/spec.md`，tickets 为 `issues/<NN>-<slug>.md`，publish 表示写本地文件。
+- `docs/agents/domain.md`：从原生 [领域配置](../plugins/spec-to-ship/skills/setup-matt-pocock-skills/domain.md) 起步，指向当前已有知识位置，文件不存在时不为凑目录提前生成 CONTEXT／ADR。
+- 现有 Agent skills 配置块：链接上述配置，并明确插件来源与业务规则入口，不覆盖其他规则。
 
-这些是业务项目配置，可以按项目调整；`skills/` 中的原生 seed 文件仍保持不变。本批不包含 triage；当宿主也未发现额外的 triage 时，原生 setup 跳过 triage-labels 文件；若宿主另有 triage，则按 setup 的条件分支确认并生成标签配置。原生 to-spec／to-tickets 仍用 `ready-for-agent`，在 tracker 配置中明确此词表示“可实施”，不表示批准或验收；若项目需要其他状态也在这里集中定义，不要求新建标签管理机制。本地 tracker seed 的 wayfinder 段只是其他流程的可选约定，本批没有安装或调用 wayfinder。
+这些是业务项目配置，可以按项目调整；插件 `skills/` 中的原生 seed 文件仍保持不变。本批不包含 triage；当宿主也未发现额外的 triage 时，原生 setup 跳过 triage-labels 文件；若宿主另有 triage，则按 setup 的条件分支确认并生成标签配置。原生 to-spec／to-tickets 仍用 `ready-for-agent`，在 tracker 配置中明确此词表示“可实施”，不表示批准或验收；若项目需要其他状态也在这里集中定义，不要求新建标签管理机制。本地 tracker seed 的 wayfinder 段只是其他流程的可选约定，本批没有安装或调用 wayfinder。
 
-Agent skills 配置块应说明：读取 tracker、domain；CONTEXT 与相关 ADR 按原生约定使用，同时读取项目当前模块知识；同名依赖绑定项目目录。用户已经确认的配置可直接作为 setup 的输入，缺失的重要项目事实先探索，不问泛化方案选择。
+Agent skills 配置块应说明：读取 tracker、domain；CONTEXT 与相关 ADR 按原生约定使用，同时读取项目当前模块知识；同名依赖绑定同一插件安装目录。用户已经确认的配置可直接作为 setup 的输入，缺失的重要项目事实先探索，不问泛化方案选择。
 
 ## 接入后的目录与维护方式
 
-下面是采用 Local Markdown tracker 的业务项目示例，不是安装时一次生成的目录清单，也不表示某个业务项目已经完成接入。日常主要审阅本次任务文件和已有业务文档，Agent 应提供具体路径链接。
+下面是采用 Local Markdown tracker 的业务项目示例，不是安装时一次生成的目录清单，也不表示某个业务项目已经完成接入。Skills 由业务目录之外的 Codex 插件缓存提供，不在项目内复制或软链接。日常主要审阅本次任务文件和已有业务文档，Agent 应提供具体路径链接。
 
 ```text
 业务项目/
 ├── AGENTS.md                         # 沿用：工程规范与知识读取导航
 ├── CLAUDE.md                         # 若已有则保留；引用入口不重复维护规则
-├── .agents/skills/                   # 安装：本地链接，不放业务任务内容
-│   ├── sts-workflow/                 # 选择并衔接本轮工作
-│   ├── sts-acceptance/               # 产品验收
-│   ├── sts-closeout/                 # 收尾与知识同步
-│   └── ……                           # 同一版本的 Matt 原生 Skills
 ├── docs/agents/                      # 初始化：原生配置读取位置
 │   ├── issue-tracker.md              # 任务在哪里、状态含义与读写约定
 │   └── domain.md                     # 领域与模块知识的实际读取位置
@@ -69,7 +80,7 @@ Agent skills 配置块应说明：读取 tracker、domain；CONTEXT 与相关 AD
 
 | 内容 | 何时创建或更新 | 人需要看什么 | Git 建议 |
 | --- | --- | --- | --- |
-| `.agents/skills/` | 安装或增加 Skill 时由链接工具处理 | 平时不用翻；排查发现或版本问题时核对 | 本方案为本机绝对路径链接，不提交为可移植安装；按项目约定忽略，脚本不修改忽略配置 |
+| Codex 插件包与缓存 | 安装或升级时由 Codex 管理 | 排查发现或版本时核对来源 | 插件源由本仓库管理；缓存不提交业务仓库 |
 | `docs/agents/` | 初始化时由 Agent 配置；目录约定变化时更新 | 初次确认位置，日常由 Agent 读取 | 提交可共享配置，优先使用项目相对路径，不写个人凭证 |
 | `AGENTS.md`／已有入口文件 | 接入时补必要导航；工程约定变化时更新 | 审阅实际规则变化 | 提交；引用入口保持单一规则源 |
 | `.scratch/<功能>/` | 任务需要持久记录时由 Agent 创建并维护 | 审阅需求、完成条件、实际验证与验收结果 | 提交有追溯价值的文本；不把整个 `.scratch/` 当缓存一概忽略 |
@@ -109,7 +120,7 @@ Agent skills 配置块应说明：读取 tracker、domain；CONTEXT 与相关 AD
 日常可调用 `sts-workflow` 描述目标、已有材料和本轮范围，也可直接选择原生能力。统一入口在原生调用条件与宿主能力允许时衔接；需要显式触发时给出下一条具体调用，不自动跑完整链。
 
 ```text
-$sts-workflow 阅读已有 docs/requirements.md 与 docs/design.md，核对当前进度，继续已授权的部分。
+$spec-to-ship:sts-workflow 阅读已有 docs/requirements.md 与 docs/design.md，核对当前进度，继续已授权的部分。
 ```
 
 两个文件已足够表达本次需求时，继续引用它们，无需重写 spec；实现不强制先拆票。仅测试、仅审查、诊断、恢复和暂停的开场见 [场景指南](usage-guide.md)。
@@ -127,4 +138,4 @@ $sts-workflow 阅读已有 docs/requirements.md 与 docs/design.md，核对当�
 | 代码／知识图谱 | 检索和导航；重新核实代码，不把推断直接升格为规则 |
 | .scratch 功能目录 | spec、tickets、证据、验收和收尾，历史追溯 |
 
-项目级链接实测只能证明路径和文件可用；完整 Skill 调用、测试环境、用户验收及知识写回须在真实业务任务里验证。
+插件包校验与宿主发现检查证明不同范围；完整 Skill 调用、测试环境、用户验收及知识写回须在真实业务任务里验证。

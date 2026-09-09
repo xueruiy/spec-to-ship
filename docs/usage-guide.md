@@ -2,9 +2,9 @@
 
 本指南给开场方式和预期协作，不另定义流程；范围、证据、原生调用条件以 [workflow.md](../workflow.md) 为准。首次使用先完成 [安装与初始化](project-setup.md)。安装后共有 15 个 Skills，日常不必记住全部名称。
 
-`$sts-workflow` 帮你判断现在该做什么：已有足够依据就复用，缺重要决定才询问。它可处理明确的小工作，并在宿主支持、原生调用条件满足时衔接相应能力；遇到原生显式触发限制会给出下一条具体调用，不会静默跑完整研发链。熟悉入口后也可直接用 `$implement`、`$diagnosing-bugs` 等原生能力。
+`$spec-to-ship:sts-workflow` 帮你判断现在该做什么：已有足够依据就复用，缺重要决定才询问。它可处理明确的小工作，并在宿主支持、原生调用条件满足时衔接相应能力；遇到原生显式触发限制会给出下一条具体调用，不会静默跑完整研发链。熟悉入口后也可直接用 `$spec-to-ship:implement`、`$spec-to-ship:diagnosing-bugs` 等原生能力。
 
-以下路径与业务内容只是示例，替换为自己的材料。先核对短名对应项目版本；有同名全局 Skill 时使用 `请使用 /绝对路径/项目/.agents/skills/sts-workflow/SKILL.md ……`，其原生依赖也绑定同一项目目录。
+以下路径与业务内容只是示例，替换为自己的材料。先核对短名对应 spec-to-ship 插件；有同名入口时明确选择该插件，并使用宿主报告的当前 Skill 实际路径，其原生依赖也绑定同一插件。业务文件路径相对于当前项目，不相对于插件缓存。
 
 ## 一次完整功能如何协作
 
@@ -19,12 +19,12 @@
 适合有痛点但产品行为还未确定的情况。不要先猜一套实现再让用户批准。
 
 ```text
-$sts-workflow 我们的用户经常重复填写客户资料，我想减少重复操作。
+$spec-to-ship:sts-workflow 我们的用户经常重复填写客户资料，我想减少重复操作。
 请先查现有流程，帮我明确要改善的行为和完成标准；这轮只讨论，不改代码。
 已有产品说明在 docs/customer.md。
 ```
 
-**Agent 会做什么：** 查现有事实，分清问题与设想，选择澄清入口。可查的问题自己查；必须由用户决定的范围或行为集中说明。原生 `grill-with-docs` 需要显式调用时，给出其项目路径及这次要澄清的具体问题。
+**Agent 会做什么：** 查现有事实，分清问题与设想，选择澄清入口。可查的问题自己查；必须由用户决定的范围或行为集中说明。原生 `grill-with-docs` 需要显式调用时，给出其插件内实际路径及这次要澄清的具体问题。
 
 **用户参与：** 决定服务谁、哪些场景纳入、异常或边界如何表现，以及可观察的完成标准。用户说“还没定”不会被记为批准。
 
@@ -35,7 +35,7 @@ $sts-workflow 我们的用户经常重复填写客户资料，我想减少重复
 是否需要新 spec，取决于信息是否足够，不取决于文件名。已有 PRD 和技术文档可以继续作为权威依据。
 
 ```text
-$sts-workflow 需求在 docs/import-prd.md，技术决定在 docs/import-design.md，
+$spec-to-ship:sts-workflow 需求在 docs/import-prd.md，技术决定在 docs/import-design.md，
 未完成任务在 .scratch/import/issues/。请核对它们与当前代码是否一致，
 从仍未完成的部分继续；不要重写一份 spec，也不要重复已完成的工作。先不提交。
 ```
@@ -51,7 +51,7 @@ $sts-workflow 需求在 docs/import-prd.md，技术决定在 docs/import-design.
 一处文案、一条明确校验或一个已清楚的小修复，不必为了工具建立 spec 和 tickets。
 
 ```text
-$sts-workflow 把设置页“保存成功后点击返回按钮。”改成“保存成功后，点击返回。”。
+$spec-to-ship:sts-workflow 把设置页“保存成功后点击返回按钮。”改成“保存成功后，点击返回。”。
 这是已确认的文案，不改交互逻辑；请直接修改并检查差异，不提交。
 ```
 
@@ -66,14 +66,14 @@ $sts-workflow 把设置页“保存成功后点击返回按钮。”改成“保
 “违反已有预期”和“想换一种体验”需要不同起点。
 
 ```text
-$sts-workflow 搜索“北京”应返回名称含北京的客户，现在返回空列表。
+$spec-to-ship:sts-workflow 搜索“北京”应返回名称含北京的客户，现在返回空列表。
 请先复现和定位原因，预期行为见 docs/search.md；这轮只诊断，不修复。
 ```
 
 **Agent 会做什么：** 核对预期、环境与复现条件，按适用策略使用 `diagnosing-bugs`。证据不足会报告缺什么；不会直接猜根因，诊断授权也不会因原生含修复步骤而扩展为修改代码。
 
 ```text
-$sts-workflow 我觉得批量导入体验不好，想优化，但还没确定要改哪部分。
+$spec-to-ship:sts-workflow 我觉得批量导入体验不好，想优化，但还没确定要改哪部分。
 请先观察现有流程，帮我区分等待时间、错误反馈和操作步骤的问题，先不实施。
 ```
 
@@ -88,17 +88,17 @@ $sts-workflow 我觉得批量导入体验不好，想优化，但还没确定要
 这三个开场互相独立，选择本次需要的一个。
 
 ```text
-$sts-workflow 只运行 python3 -m unittest discover -s tests，报告失败与覆盖。
+$spec-to-ship:sts-workflow 只运行 python3 -m unittest discover -s tests，报告失败与覆盖。
 不要修复代码，不生成产品验收结论。
 ```
 
 ```text
-$sts-workflow 只审查当前未提交差异是否符合 docs/requirements.md。
+$spec-to-ship:sts-workflow 只审查当前未提交差异是否符合 docs/requirements.md。
 请列出具体问题和覆盖范围，不运行测试、不修复、不提交。
 ```
 
 ```text
-$sts-workflow 只验收当前导入功能，标准在已确认的 docs/import-prd.md。
+$spec-to-ship:sts-workflow 只验收当前导入功能，标准在已确认的 docs/import-prd.md。
 已有测试结果在 .scratch/import/checks.md；请先核对版本是否仍有效，不改代码。
 ```
 
@@ -113,7 +113,7 @@ $sts-workflow 只验收当前导入功能，标准在已确认的 docs/import-pr
 交接记录是入口，不是对当前工作区的证明。
 
 ```text
-$sts-workflow 根据 .scratch/export/handoff.md 恢复任务。
+$spec-to-ship:sts-workflow 根据 .scratch/export/handoff.md 恢复任务。
 先核对当前代码、未提交改动、上次证据和待确认决定，继续不依赖未决项的已授权工作。
 如果必须由我选择，先指出问题，不替我决定；暂不提交。
 ```
@@ -121,7 +121,7 @@ $sts-workflow 根据 .scratch/export/handoff.md 恢复任务。
 **Agent 会做什么：** 比较旧版本与当前工作区；相关变化使旧证据失效时，标记需重新验证。先解决阻塞用户决定，再做依赖它的实现；可继续的工作与不能继续的工作分开报告，不重走已有足够依据的阶段。
 
 ```text
-$sts-workflow 这项功能先暂停。请整理当前完成与未完成内容、证据和恢复入口，
+$spec-to-ship:sts-workflow 这项功能先暂停。请整理当前完成与未完成内容、证据和恢复入口，
 只同步已经确认且值得保留的模块知识；不把它记为成功交付，不提交。
 ```
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "产品验收"
+  short_description: "对照既定产品标准与当前证据核对结果，保留用户最终确认"
+  default_prompt: "使用 $spec-to-ship:sts-acceptance，对照既定标准与当前证据验收本次功能。"
