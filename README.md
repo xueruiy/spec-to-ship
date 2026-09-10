@@ -45,7 +45,7 @@ $spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继�
 复用已有材料，不重写 spec；先核对当前代码与证据，暂不提交。
 ```
 
-`sts-workflow` 负责选择下一步：明确小改动可直接处理；原生调用条件与宿主能力允许时衔接所选 Skill，需要显式触发时给你下一条具体调用指令。**它不会无条件自动跑完所有原生 Skills。** 熟悉入口后仍可直接调用 `implement`、`diagnosing-bugs`、`code-review` 等。
+`sts-workflow` 负责选择下一步：明确小改动可直接处理；原生调用条件与宿主能力允许时衔接所选 Skill，需要显式触发时给你下一条具体调用指令。**它不会无条件自动跑完所有原生 Skills。** 已授权交付时按需主动衔接产品验收和收尾与知识同步，无须逐个手动触发；用户最终认可仍单独记录。熟悉入口后仍可直接调用 `implement`、`diagnosing-bugs`、`code-review` 等。
 
 短名只在插件来源已确认时使用；有歧义时明确指定 spec-to-ship 插件，并使用宿主报告的当前插件内 Skill 绝对路径。依赖绑定同一插件，业务材料始终读取当前业务项目。
 
