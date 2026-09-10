@@ -64,4 +64,6 @@ $spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继�
 - [项目接入](docs/project-setup.md) · [场景指南](docs/usage-guide.md) · [流程合同](workflow.md)。
 - [来源](SOURCES.md) · [逐文件 manifest](upstream-manifest.json) · [随包许可证](plugins/spec-to-ship/licenses/) · [维护要求](AGENTS.md)。
 
+已授权工作连续推进，必要的原生显式调用限制仍保留。验收优先展示当前结果；任务证据按需精简，长期知识按业务模块维护当前能力，中文项目可使用中文模块文件名。详见[日常使用](docs/usage-guide.md#日常怎样少操作少产物)。
+
 业务知识和真实产物留在业务项目。本仓库不建立流程 CLI、看板、状态机或全局控制器。原生 `implement` 含提交动作，`code-review` 仅覆盖已提交差异，均需遵守 [版本与权限合同](workflow.md#版本证据与权限)。工具链检查及隔离场景试用不能替代目标宿主发现、真实业务验证或用户验收。
