@@ -1,11 +1,11 @@
 # 来源、版本与复用边界
 
-核对日期：2026-09-09。当前实现采用固定版本原生 Matt Skills，通过 Codex 插件整包分发，辅以项目接入、按任务选择入口、产品验收及知识同步。没有第二套 PRD／技术方案／tickets 流程；旧 `templates/` 已删除，历史记录仅保留在 Git 历史。
+核对日期：2026-09-11。当前实现采用固定版本原生 Matt Skills，通过 Codex 插件整包分发，辅以项目接入、按任务选择入口、产品验收及知识同步。没有第二套 PRD／技术方案／tickets 流程；旧 `templates/` 已删除，历史记录仅保留在 Git 历史。
 
 ## Matt Skills：原生导入
 
 - 来源：[mattpocock/skills](https://github.com/mattpocock/skills)，固定 commit `3cca18b368ae95cdbdebbff572ccafa662551015`（2026-09-04T09:43:27+01:00）。本次固定此版本，不宣称它是未来最新版本。
-- 此前使用系统 skill-installer 的 `install-skill-from-github.py --repo mattpocock/skills --ref 3cca18b368ae95cdbdebbff572ccafa662551015 --dest /绝对路径/spec-to-ship/skills --path ...` 导入下表完整目录；现整体迁移到 `plugins/spec-to-ship/skills/`，保留正文、agents 元数据、references、模板与脚本，不改写原生文件。
+- 此前使用系统 skill-installer 的 `install-skill-from-github.py --repo mattpocock/skills --ref 3cca18b368ae95cdbdebbff572ccafa662551015 --dest /绝对路径/spec-to-ship/skills --path ...` 导入下表完整目录；现整体迁移到 `plugins/spec-to-ship/skills/`，保留正文、agents 元数据、references、模板与脚本，方法正文不变；调用字段适配见下文。
 - [完整 MIT 许可证](plugins/spec-to-ship/licenses/mattpocock-skills.LICENSE)：Copyright (c) 2026 Matt Pocock，适用于导入内容。所有原生来源路径、本地路径、逐文件 SHA-256、选入原因和依赖见 [upstream-manifest.json](upstream-manifest.json)。复制这些原生目录时应同时保留该许可，不将其视为本仓库全部自有内容的许可证。
 - [verify-upstream.py](scripts/verify-upstream.py) 校验 36 个原生文件及许可证的 hash、文件集合、依赖和资源链接。加 `--source /上游Git目录` 可直接用固定 commit 的 `git show` 字节对比，而非只信任本地 manifest。
 
@@ -28,7 +28,7 @@
 
 ## 原生行为与项目配置
 
-原生的显式触发标记和 `agents/openai.yaml` 原样保留；安装后需在宿主确认发现与路径，不能把文件存在当调用成功。本仓库不增加全局强制编排器。全局同名版本不覆盖，明确路径调用见 [项目接入](docs/project-setup.md)。
+六个入口的显式限定已按本次授权适配为自动选择，其他元数据和方法正文保留；安装后需在宿主确认发现与路径，不能把文件存在当调用成功。本仓库不增加全局强制编排器。全局同名版本不覆盖，明确路径调用见 [项目接入](docs/project-setup.md)。
 
 接入初始化复用原生 setup，插件安装只准备能力、不代写项目规范。业务项目的 tracker／domain 配置可以按其 AGENTS 和已有文档布局调整；这是原生允许的项目配置，不是对原生 Skill 做补丁。需要新建 spec 时产品与技术决定合并，tickets 使用原生结构；已有足够的 PRD／技术文档不重复转写，继续引用实际权威依据。原生提交、发布、确认步骤都受用户当前有效授权约束。
 
@@ -36,23 +36,31 @@
 
 ## 本仓库新增
 
-当前包含 12 个原生 Skill 与 3 个自定义 Skill，共 15 个。原生 manifest 只记录上游内容，自定义内容由 Git 跟踪。
+当前包含 12 个原生 Skill 与 3 个自定义 Skill，共 15 个。manifest 保留上游原始 hash，并逐文件记录调用适配及分发 hash；自定义内容由 Git 跟踪。
 
-- `plugins/spec-to-ship/skills/sts-workflow`：根据目标、已有材料、证据和授权选择最小足够入口，衔接原生或补充能力；保留原生显式触发限制，不承诺自动运行完整链。
+- `plugins/spec-to-ship/skills/sts-workflow`：根据目标、已有材料、证据和授权选择最小足够入口，衔接原生或补充能力；实际执行所选同包方法，不要求逐阶段调用，也不强制运行完整链。
 
 - `plugins/spec-to-ship/skills/sts-acceptance`：按已确认 spec 或等价材料标准与当前证据验收，记录用户最终结论；按需使用其自包含模板。
 - `plugins/spec-to-ship/skills/sts-closeout`：整理实际交付与遗留，将确认知识同步到唯一权威模块文档；按需使用其自包含模板。
 - README、workflow、AGENTS、接入说明、场景指南及插件元数据与校验脚本为本仓库自有内容。未强制 R／AC 编号，未重建原生规格或任务模板；小任务不强制验收和收尾文件。
 
-自定义 Skills 使用系统 skill-creator 指导编写，并运行其 quick_validate。原生导入使用系统 skill-installer helper；这些开发辅助工具未复制进项目，也不是业务研发链的运行依赖。使用已有 Python、Playwright、Chrome 进行验证，没有安装第三方依赖。
+自定义 Skills 使用系统 skill-creator 指导编写，并运行其 quick_validate。原生导入使用系统 skill-installer helper；这些开发辅助工具未复制进项目，也不是业务研发链的运行依赖。本轮使用临时 Python venv 中的 PyYAML 运行系统校验 helper，不改变项目依赖；此前图表验证使用 Python、Playwright、Chrome。
 
 ## Codex 插件打包
 
-使用本地系统 plugin-creator 的 `create_basic_plugin.py` 创建 [插件清单](plugins/spec-to-ship/.codex-plugin/plugin.json) 与 [repo marketplace](.agents/plugins/marketplace.json)，沿用 helper 默认的 `personal` 名称。包根是 `plugins/spec-to-ship`，包含唯一一份 15 个 Skills 和 Matt MIT 许可；`upstream-manifest.json` 只变更本地路径与包根，来源路径、固定 commit 和 SHA-256 保持不变。
+使用本地系统 plugin-creator 的 `create_basic_plugin.py` 创建 [插件清单](plugins/spec-to-ship/.codex-plugin/plugin.json) 与 [repo marketplace](.agents/plugins/marketplace.json)，沿用 helper 默认的 `personal` 名称。包根是 `plugins/spec-to-ship`，包含唯一一份 15 个 Skills 和 Matt MIT 许可；`upstream-manifest.json` 保留来源路径、固定 commit 与原始 SHA-256；调用适配另外记录，不覆盖原始 hash。
 
 3 个 sts 的依赖解析适配为同一插件的相对资源与实际安装路径；业务规则、配置和产物继续留在业务项目。旧 `link-project-skills.py` 和对应安装测试移除，改为插件包校验测试，不保留第二套安装方式。不为插件添加 MCP、apps 或自动业务配置。
 
-plugin-creator 的完整校验目前拒绝 6 个原生 `disable-model-invocation: true` 标记。保留原生文件并记录此兼容性限制，不通过改写标记制造“校验通过”；包结构、原生字节、实际宿主发现分别验证。当前 Codex 实际安装与 `skills/list` 强制刷新已发现全部 15 个限定名称入口（`spec-to-ship:<name>`），均启用且无发现错误；测试精确核对 helper 仅返回上述 6 项差异，任何其他错误均失败。安装与发现结果不能替代完整原生流程验证。
+本次完整 helper 校验要求无错误通过，不再豁免旧版的六项显式标记拒绝。静态校验、隔离试用与目标宿主发现分别报告，见 [调用适配验证](docs/invocation-validation.md)。此前旧版曾在 Codex 发现 15 个入口，不能将该历史结果用作本次适配的运行证据。
+
+### 调用适配与升级
+
+为支持“一次进入、按需推进”，六个入口 `grill-with-docs`、`to-spec`、`to-tickets`、`implement`、`setup-matt-pocock-skills`、`handoff` 仅做两项适配：`disable-model-invocation: true → false`、`allow_implicit_invocation: false → true`。后两者仍只在任务确需且已授权时由入口选择，安装本身不初始化业务项目或生成交接。调用开放不改变方法正文中的实质确认、提交及依赖步骤。sts-workflow 另按宿主支持方式解释 Skill 加载动作：有工具用工具，Codex 文件加载型宿主读取同包指令并执行及递归处理依赖。此映射不改上游正文，不允许只读不执行或伪造工具调用。
+
+清单每个适配文件的 `sha256` 始终是固定上游 hash，`invocation_adapter` 记录精确原值、新值和适配文件 hash。校验器只接受上述两个字段，先检查分发文件，再还原并验证上游 hash；使用 `--source` 时还会比较还原后的固定 Git 原文。测试覆盖正文被改后重算适配 hash、非法适配及资源缺失，不能以更新适配记录掩盖正文漂移。
+
+升级时重新导入完整固定版本并核对许可证、依赖和原始 hash，再审查这六个入口是否仍需适配；重新计算分发 hash，执行完整包校验与宿主发现验证。禁止自动向已变化的上游字段套用旧补丁，禁止手改插件缓存。此包应称为“固定 Matt 方法与调用适配”，不能宣称所有分发字节完全原生。
 
 ## agentic-delivery：仅历史研究参考
 

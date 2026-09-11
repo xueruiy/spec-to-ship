@@ -12,7 +12,7 @@ import sys
 def verify(root: Path, source: Path | None = None) -> int:
     """root 为本仓库；source 可选，为原生仓库 checkout，使用 git show 读取固定提交。"""
     manifest = json.loads((root / "upstream-manifest.json").read_text())
-    # 包根记录于来源清单，迁移路径不改变上游文件字节。
+    # 包根记录于来源清单；获准调用适配先还原，再验证上游字节。
     bundle = root / manifest["bundle_root"]
     skills_root = bundle / "skills"
     names = {skill["name"] for skill in manifest["skills"]}
@@ -44,13 +44,33 @@ def verify(root: Path, source: Path | None = None) -> int:
     if not (skills_root / "diagnosing-bugs/scripts/hitl-loop.template.sh").is_file():
         raise ValueError("缺少原生 HITL 脚本")
     print(f"通过：{len(names)} 个原生 Skills，{count} 个原生文件及 MIT，{link_count} 个资源链接；依赖齐备。")
-    print("已与固定 Git 提交原文比对。" if source else "已与 manifest hash 比对；未连接上游。")
+    print("调用适配还原后已与固定 Git 提交原文比对。" if source else "调用适配还原后已与 manifest 原始 hash 比对；未连接上游。")
     return 0
 
 
 def check_file(root: Path, entry: dict, commit: str, source: Path | None) -> None:
-    """entry 指定本地路径、来源路径和 hash；source 提供时进一步比较 Git 原始字节。"""
+    """root 为包仓库，entry 为来源和适配记录，commit 为固定版本，source 为可选上游 checkout。"""
     data = (root / entry["path"]).read_bytes()
+    adapter = entry.get("invocation_adapter")
+    if adapter:
+        # 只允许两个布尔调用字段；不能借适配清单放行正文或其他元数据补丁。
+        allowed = (
+            ("disable-model-invocation: true\n", "disable-model-invocation: false\n")
+            if entry["path"].endswith("/SKILL.md") else
+            ("  allow_implicit_invocation: false\n", "  allow_implicit_invocation: true\n")
+            if entry["path"].endswith("/agents/openai.yaml") else None
+        )
+        if allowed is None or (adapter["original"], adapter["adapted"]) != allowed:
+            raise ValueError(f"未获准的调用适配：{entry['path']}")
+        if hashlib.sha256(data).hexdigest() != adapter["sha256"]:
+            raise ValueError(f"适配文件 hash 不一致：{entry['path']}")
+        before, after = (value.encode() for value in allowed)
+        if data.count(after) != 1:
+            raise ValueError(f"调用字段不唯一：{entry['path']}")
+        if entry["path"].endswith("/SKILL.md") and after not in data.split(b"---", 2)[1]:
+            raise ValueError(f"调用字段不在 frontmatter：{entry['path']}")
+        # 原始 hash 不被适配 hash 替代，恢复后仍逐字节验证固定上游。
+        data = data.replace(after, before, 1)
     if hashlib.sha256(data).hexdigest() != entry["sha256"]:
         raise ValueError(f"hash 不一致：{entry['path']}")
     if source:

@@ -1,4 +1,4 @@
 interface:
   display_name: "研发入口"
-  short_description: "根据目标、已有材料和授权选择下一步，衔接同一插件内研发技能并保留直接调用"
+  short_description: "一次进入，按目标、已有材料和授权执行同包研发方法，按需衔接而不强制完整流程"
   default_prompt: "使用 $spec-to-ship:sts-workflow，根据我提供的目标、已有材料和授权，判断并推进合适的下一步。"
