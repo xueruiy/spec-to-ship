@@ -100,12 +100,9 @@ $spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继�
 
 完整入口及配套资源见 [Skills 目录](plugins/spec-to-ship/skills/)。`implement` 含提交动作，`code-review` 仅覆盖已提交差异；操作授权与工作区审查方式见 [版本与权限合同](workflow.md#版本证据与权限)。
 
-<details>
-<summary>展开详细入口选择图</summary>
+上面的表用于直接查找 Skill；下面的图帮助判断本轮应先澄清、实施、诊断，还是只完成检查。图中分支表示按需选择，不是每个任务都要走完的步骤。
 
 ![根据目标、已有材料与授权选择入口](docs/diagrams/workflow-overview.svg)
-
-</details>
 
 各场景的 Agent 行为、用户参与点和完成产物见 **[场景使用指南](docs/usage-guide.md)**。[HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线查看，GitHub 页面展示的是源码。
 
