@@ -1,0 +1,17 @@
+{
+  "说明": "README 原创 AI 图片的生成提示词。协作图仅为已授权交付场景示意，不是运行截图或业务验收证据。",
+  "生成日期": "2026-10-08",
+  "生成工具": "内置 image_gen（imagegen Skill）",
+  "图片": [
+    {
+      "文件": "readme-hero.png",
+      "用途": "README 顶部品牌横幅",
+      "提示词": "Use case: ads-marketing. Asset type: premium GitHub README header for the Chinese developer toolkit \"spec-to-ship\". Create a finished raster banner, wide landscape 3:1 aspect ratio, ideally 1800x600. Design a restrained editorial identity with off-white #F5F5F5 background, dark blue-gray #2D3142 typography and small warm orange #EB6C36 accents, subtle pale peach. Large crisp typeset exact title \"spec-to-ship\" on the left, with exact Chinese subtitle \"从目标出发，按需交付\" directly below, and smaller but readable exact line \"Matt Skills · 产品验收 · 知识同步\". All text must be spelled verbatim, no additional text. Right side: beautiful abstract tactile paper document sheets connected by a slender orange thread, transforming into orderly layered knowledge cards and a small understated code bracket motif. Soft diffuse shadows, refined thin geometry, subtle paper material, no strong 3D bevels. Generous clear space, polished typography, calm intelligent engineering brand, excellent readability at 840px display width. Background fills entire canvas, no browser chrome, no UI controls, no logos from other companies, no robots, no rockets, no checkmarks or claims of passing, no badges, no watermark, no tiny text. Keep title and imagery safely inset with roughly 7 percent margins. This is a finished banner, not a mockup photograph."
+    },
+    {
+      "文件": "readme-collaboration.png",
+      "用途": "README 已授权交付协作示意",
+      "提示词": "Use case: infographic-diagram. Asset type: GitHub README explanatory editorial illustration for the Chinese developer toolkit spec-to-ship, matched to a calm premium off-white, dark blue-gray and orange identity. Create a polished raster illustration in a wide 2.4:1 landscape canvas ideally 1920x800. Layout: exact headline at upper left \"一个目标，按需推进\" and small orange outlined label upper right \"协作示意\". Underneath arrange three large softly rounded editorial cards left-to-right, separated by thin orange arrows. Use wide margins, ample whitespace, very readable large Chinese sans-serif typography, subtle soft shadows, off-white #F5F5F5 canvas, dark blue-gray #2D3142 text, warm orange #EB6C36 accent, pale peach highlights. First card has small minimalist conversation/document motif and exact title \"你提供目标\", with two exact supporting lines \"改善客户重复录入\" and \"已有材料 + 本轮范围\". Middle card has restrained branching document motif and exact title \"Agent 选方法\", with two exact lines \"复用材料，按需执行\" and \"关键取舍由你确认\". Third card has neat paper/code/knowledge stack motif and exact title \"留下可核对的结果\", with two exact lines \"实际修改与验证证据\" and \"遗留事项与模块知识\". Along bottom, render exact readable note \"仅示意已授权交付场景；只讨论或检查时，在对应结果处结束。\" Everything must render in correct simplified Chinese, use only the quoted text, no additional text. This is a conceptual explanation, not a real screenshot, not a promise of completed business validation. Do not create a mandatory sequence of all skills or label anything passed. No green checkmarks, no code samples, no fake app chrome, no robots, no rockets, no logos, no watermark. Keep all text readable when scaled to 840px wide. Visually coherent with a premium editorial README header using paper materials, thin orange threads and dark navy type."
+    }
+  ]
+}

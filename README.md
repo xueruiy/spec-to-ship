@@ -1,5 +1,7 @@
 # spec-to-ship
 
+![spec-to-ship：从目标出发，按需交付；Matt Skills、产品验收与知识同步](docs/images/readme-hero.png)
+
 面向个人与小团队的 AI 辅助研发工具包。从一个目标或已有需求开始，让 Agent 在授权范围内推进工作，并保留可核对的结果与项目知识。
 
 **日常从 `$spec-to-ship:sts-workflow` 开始，说明目标、已有材料和本次范围即可。**
@@ -50,6 +52,10 @@ codex plugin list
 
 ## 3. 开始一个任务
 
+![已授权交付场景的协作示意：用户提供目标、已有材料和本轮范围；Agent 复用材料并选择方法，关键取舍由用户确认；按实际工作保留修改、验证证据、遗留事项与模块知识](docs/images/readme-collaboration.png)
+
+图中是已授权交付的协作示意；只讨论或检查时，在对应结果处结束。
+
 不确定下一步时，描述目标和本轮范围：
 
 ```text
@@ -94,7 +100,12 @@ $spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继�
 
 完整入口及配套资源见 [Skills 目录](plugins/spec-to-ship/skills/)。`implement` 含提交动作，`code-review` 仅覆盖已提交差异；操作授权与工作区审查方式见 [版本与权限合同](workflow.md#版本证据与权限)。
 
+<details>
+<summary>展开详细入口选择图</summary>
+
 ![根据目标、已有材料与授权选择入口](docs/diagrams/workflow-overview.svg)
+
+</details>
 
 各场景的 Agent 行为、用户参与点和完成产物见 **[场景使用指南](docs/usage-guide.md)**。[HTML 源图](docs/diagrams/workflow-overview.html) 可下载后离线查看，GitHub 页面展示的是源码。
 
@@ -119,6 +130,7 @@ $spec-to-ship:sts-workflow 按 docs/import-prd.md 和 docs/import-design.md 继�
 - [repo marketplace](.agents/plugins/marketplace.json) · [插件清单](plugins/spec-to-ship/.codex-plugin/plugin.json)。
 - [项目接入](docs/project-setup.md) · [场景指南](docs/usage-guide.md) · [流程合同](workflow.md)。
 - [验证记录](docs/invocation-validation.md)：工程检查、隔离试用与宿主发现的证据和限制。
+- [README 图片生成提示词](docs/images/generation-prompts.json)：横幅与协作示意的生成来源，便于后续维护。
 - [来源](SOURCES.md) · [逐文件 manifest](upstream-manifest.json) · [随包许可证](plugins/spec-to-ship/licenses/) · [维护要求](AGENTS.md)。
 
 已授权工作连续推进，产品取舍与新增权限仍由用户决定。验收优先展示当前结果；任务证据按需精简，长期知识按业务模块维护当前能力，中文项目可使用中文模块文件名。详见[日常使用](docs/usage-guide.md#日常怎样少操作少产物)。
